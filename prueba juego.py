@@ -38,6 +38,21 @@ def moveupm():
         mseconds=100
         movedownm()
         return None
+    elif coords1m==coordsplatcentroy2 and (coordsmariox1<=coordsplatcentrox2 and coordsmariox2>=coordsplatcentrox1):
+      time.sleep(0.01)
+      mseconds=100
+      movedownm()
+      return None
+    elif coords1m==coordsplat5y2 and coordsmariox1<=coordsplat5x2:
+      time.sleep(0.01)
+      mseconds=100
+      movedownm()
+      return None
+    elif coords1m==coordsplat6y2 and coordsmariox2>=coordsplat6x1:
+      time.sleep(0.01)
+      mseconds=100
+      movedownm()
+      return None
     elif coords1m<=coords2m:
         time.sleep(0.01)
         movedownm()
@@ -47,7 +62,6 @@ def moveupm():
         canvas.move(mario, 0, -2)
         canvas.move(spritemario, 0, -2)
 def movedownm():
-    #print ('pene')
     global coords1m
     global coords3m
     global estadomario
@@ -88,7 +102,6 @@ def movedownm():
             spritemario=canvas.create_image(coordsmariox1+25, coordsmarioy2-27, image=imagenmarioderecha)
         return None
     elif coordsmarioy2==coordsplat4y1 and coordsmariox2>=coordsplat4x1:
-        print('tru tho')
         if estadomario=='saltoizquierda':
             estadomario= 'izquierda'
             canvas.delete(spritemario)
@@ -98,6 +111,36 @@ def movedownm():
             canvas.delete(spritemario)
             spritemario=canvas.create_image(coordsmariox1+25, coordsmarioy2-27, image=imagenmarioderecha)
         return None
+    elif coordsmarioy2==coordsplatcentroy1 and (coordsmariox2>=coordsplatcentrox1 and coordsmariox1<=coordsplatcentrox2):
+        if estadomario=='saltoizquierda':
+            estadomario= 'izquierda'
+            canvas.delete(spritemario)
+            spritemario=canvas.create_image(coordsmariox1+25, coordsmarioy2-27, image=imagenmarioizquierda)
+        elif estadomario =='saltoderecha':
+            estadomario='derecha'
+            canvas.delete(spritemario)
+            spritemario=canvas.create_image(coordsmariox1+25, coordsmarioy2-27, image=imagenmarioderecha)
+        return None
+    elif coordsmarioy2==coordsplat5y1 and coordsmariox1<=coordsplat5x2:
+      if estadomario=='saltoizquierda':
+            estadomario= 'izquierda'
+            canvas.delete(spritemario)
+            spritemario=canvas.create_image(coordsmariox1+25, coordsmarioy2-27, image=imagenmarioizquierda)
+      elif estadomario =='saltoderecha':
+            estadomario='derecha'
+            canvas.delete(spritemario)
+            spritemario=canvas.create_image(coordsmariox1+25, coordsmarioy2-27, image=imagenmarioderecha)
+      return None
+    elif coordsmarioy2==coordsplat6y1 and coordsmariox2>=coordsplat6x1:
+      if estadomario=='saltoizquierda':
+            estadomario= 'izquierda'
+            canvas.delete(spritemario)
+            spritemario=canvas.create_image(coordsmariox1+25, coordsmarioy2-27, image=imagenmarioizquierda)
+      elif estadomario =='saltoderecha':
+            estadomario='derecha'
+            canvas.delete(spritemario)
+            spritemario=canvas.create_image(coordsmariox1+25, coordsmarioy2-27, image=imagenmarioderecha)
+      return None
     elif coords1m>= coords3m:
         if estadomario=='saltoizquierda':
             estadomario= 'izquierda'
@@ -162,7 +205,7 @@ def fallmplat1():
     coordsmarioy1= int(canvas.coords(mario)[1])
     coordsmariox2=int(canvas.coords(mario)[2])
     coordsmarioy2=int(canvas.coords(mario)[3])
-    if coordsmarioy2 <720 and coordsmarioy2 >717:
+    if coordsmarioy2 <540 and coordsmarioy2 >537:
         if estadomario=='saltoizquierda':
             estadomario= 'izquierda'
             canvas.delete(spritemario)
@@ -184,7 +227,7 @@ def fallmplat2():
     coordsmarioy1= int(canvas.coords(mario)[1])
     coordsmariox2=int(canvas.coords(mario)[2])
     coordsmarioy2=int(canvas.coords(mario)[3])
-    if coordsmarioy2<720 and coordsmarioy2>717:
+    if coordsmarioy2<540 and coordsmarioy2>537:
         if estadomario=='saltoizquierda':
             estadomario='izquierda'
             canvas.delete(spritemario)
@@ -241,6 +284,95 @@ def fallmplat4():
         x.after(2,fallmplat3)
         canvas.move(mario, 0, 2)
         canvas.move(spritemario, 0, 2)
+def fallmplatcentroizquierda():
+    global estadomario
+    global spritemario
+    coordsmariox1=int(canvas.coords(mario)[0])
+    coordsmarioy1= int(canvas.coords(mario)[1])
+    coordsmariox2=int(canvas.coords(mario)[2])
+    coordsmarioy2=int(canvas.coords(mario)[3])
+    if coordsmarioy2==coordsplat1y1:
+      if estadomario=='saltoizquierda':
+        estadomario='izquierda'
+        canvas.delete(spritemario)
+        spritemario=canvas.create_image(coordsmariox1+25, coordsmarioy2-27, image=imagenmarioizquierda)
+      elif estadomario =='saltoderecha':
+        estadomario='derecha'
+        canvas.delete(spritemario)
+        spritemario=canvas.create_image(coordsmariox1+25, coordsmarioy2-27, image=imagenmarioderecha)
+        return None
+    else:
+      x.after(2,fallmplatcentroizquierda)
+      canvas.move(mario,0,2)
+      canvas.move(spritemario,0,2)
+        
+def fallmplatcentroderecha():
+  global estadomario
+  global spritemario
+  coordsmariox1=int(canvas.coords(mario)[0])
+  coordsmarioy1= int(canvas.coords(mario)[1])
+  coordsmariox2=int(canvas.coords(mario)[2])
+  coordsmarioy2=int(canvas.coords(mario)[3])
+  if coordsmarioy2==coordsplat2y1:
+    if estadomario=='saltoizquierda':
+      estadomario='izquierda'
+      canvas.delete(spritemario)
+      spritemario=canvas.create_image(coordsmariox1+25, coordsmarioy2-27, image=imagenmarioizquierda)
+    elif estadomario =='saltoderecha':
+      estadomario='derecha'
+      canvas.delete(spritemario)
+      spritemario=canvas.create_image(coordsmariox1+25, coordsmarioy2-27, image=imagenmarioderecha)
+    return None
+  else:
+    x.after(2, fallmplatcentroderecha)
+    canvas.move(mario,0,2)
+    canvas.move(spritemario,0,2)
+      
+        
+def fallmplat5():
+    global estadomario
+    global spritemario
+    coordsmariox1=int(canvas.coords(mario)[0])
+    coordsmarioy1= int(canvas.coords(mario)[1])
+    coordsmariox2=int(canvas.coords(mario)[2])
+    coordsmarioy2=int(canvas.coords(mario)[3])
+    if coordsmarioy2==coordsplatcentroy1:
+        if estadomario=='saltoizquierda':
+            estadomario='izquierda'
+            canvas.delete(spritemario)
+            spritemario=canvas.create_image(coordsmariox1+25, coordsmarioy2-27, image=imagenmarioizquierda)
+        elif estadomario =='saltoderecha':
+            estadomario='derecha'
+            canvas.delete(spritemario)
+            spritemario=canvas.create_image(coordsmariox1+25, coordsmarioy2-27, image=imagenmarioderecha)
+        return None
+    else:
+        x.after(2, fallmplat5)
+        canvas.move(mario,0,2)
+        canvas.move(spritemario,0,2)
+def fallmplat6():
+    global estadomario
+    global spritemario
+    coordsmariox1=int(canvas.coords(mario)[0])
+    coordsmarioy1= int(canvas.coords(mario)[1])
+    coordsmariox2=int(canvas.coords(mario)[2])
+    coordsmarioy2=int(canvas.coords(mario)[3])
+    if coordsmarioy2==coordsplatcentroy1:
+        if estadomario=='saltoizquierda':
+            estadomario='izquierda'
+            canvas.delete(spritemario)
+            spritemario=canvas.create_image(coordsmariox1+25, coordsmarioy2-27, image=imagenmarioizquierda)
+        elif estadomario =='saltoderecha':
+            estadomario='derecha'
+            canvas.delete(spritemario)
+            spritemario=canvas.create_image(coordsmariox1+25, coordsmarioy2-27, image=imagenmarioderecha)
+        return None
+    else:
+        x.after(2, fallmplat6)
+        canvas.move(mario,0,2)
+        canvas.move(spritemario,0,2)
+  
+    
 
     
 def keym(event):
@@ -251,6 +383,7 @@ def keym(event):
     coordsmarioy1= int(canvas.coords(mario)[1])
     coordsmarioy2=int(canvas.coords(mario)[3])
     coordsmariox2=int(canvas.coords(mario)[2])
+    print(coordsmarioy2==coordsplatcentroy1 and coordsmariox2<coordsplatcentrox1)
     if event.char=='a':
         if estadomario== 'derecha':
             estadomario = 'izquierda'
@@ -272,13 +405,27 @@ def keym(event):
                 spritemario=canvas.create_image(coordsmariox1+25,coordsmarioy2-27,image=imagenmariosaltoizquierda)
                 print(estadomario)
                 fallmplat2()
+        elif coordsmarioy2==coordsplatcentroy1 and coordsmariox2<coordsplatcentrox1 and coordsmariox1>coordsplat3x2:
+          print('tru tho xd')
+          estadomario='saltoizquierda'
+          canvas.delete(spritemario)
+          spritemario=canvas.create_image(coordsmariox1+25,coordsmarioy2-27,image=imagenmariosaltoizquierda)
+          print(estadomario)
+          fallmplatcentroizquierda()
         elif coordsmarioy2==coordsplat4y1 and coordsmariox2<coordsplat4x1:
-            if coordsmariox1>coordsplat3x2:
+            if coordsmariox1>coordsplatcentrox2:
                 estadomario='saltoizquierda'
                 canvas.delete(spritemario)
                 spritemario=canvas.create_image(coordsmariox1+25,coordsmarioy2-27,image=imagenmariosaltoizquierda)
                 print(estadomario)
                 fallmplat4()
+        elif coordsmarioy2==coordsplat6y1 and coordsmariox2<coordsplat6x1 and coordsmariox1>coordsplat5x2:
+                estadomario='saltoizquierda'
+                canvas.delete(spritemario)
+                spritemario=canvas.create_image(coordsmariox1+25,coordsmarioy2-27,image=imagenmariosaltoizquierda)
+                print(estadomario)
+                fallmplat6()
+        
         if coordsmariox1<0:
             canvas.move(mario, 1250, 0)
             canvas.move(spritemario, 1250, 0)
@@ -286,6 +433,7 @@ def keym(event):
         canvas.move(spritemario, -20, 0)
 
     elif event.char== 'd':
+        orient='derecha'
         if estadomario== 'izquierda':
             estadomario='derecha'
             canvas.delete(spritemario)
@@ -305,16 +453,30 @@ def keym(event):
                 spritemario=canvas.create_image(coordsmariox1+25,coordsmarioy2-27,image=imagenmariosaltoderecha)
                 print(estadomario)
                 fallmplat1()
+        elif coordsmarioy2==coordsplatcentroy1 and coordsmariox1>coordsplatcentrox2 and coordsmariox2<coordsplat4x1:
+          estadomario='saltoderecha'
+          canvas.delete(spritemario)
+          spritemario=canvas.create_image(coordsmariox1+25,coordsmarioy2-27,image=imagenmariosaltoderecha)
+          print(estadomario)
+          fallmplatcentroderecha()
         elif coordsmarioy2==coordsplat3y1 and coordsmariox1 > coordsplat3x2:
-            if coordsmariox2< coordsplat4x1:
+            if coordsmariox2< coordsplatcentrox1:
                 estadomario='saltoderecha'
                 canvas.delete(spritemario)
                 spritemario=canvas.create_image(coordsmariox1+25,coordsmarioy2-27,image=imagenmariosaltoderecha)
                 print(estadomario)
                 fallmplat3()
+
+        elif coordsmarioy2==coordsplat5y1 and coordsmariox1>coordsplat5x2 and coordsmariox2< coordsplat6x1:
+          estadomario='saltoderecha'
+          canvas.delete(spritemario)
+          spritemario=canvas.create_image(coordsmariox1+25,coordsmarioy2-27,image=imagenmariosaltoderecha)
+          print(estadomario)
+          fallmplat5()
+        
         if coordsmariox2>1280:
-            canvas.move(mario,-1250,0)
-            canvas.move(spritemario,-1250,0)
+          canvas.move(mario,-1250,0)
+          canvas.move(spritemario,-1250,0)
             
         canvas.move(mario, 20, 0)
         canvas.move(spritemario, 20, 0)
@@ -328,6 +490,8 @@ def destruirprueba():
     global plat2
     global plat3
     global plat4
+    global plat5
+    global plat6
     global mario
     global coordsplat2x1
     global coordsplat2y1
@@ -355,6 +519,17 @@ def destruirprueba():
     global coordsplatcentroy1
     global coordsplatcentrox2
     global coordsplatcentroy2
+
+    global coordsplat5x1
+    global coordsplat5y1
+    global coordsplat5x2
+    global coordsplat5y2
+    global coordsplat6x1
+    global coordsplat6y1
+    global coordsplat6x2
+    global coordsplat6y2
+
+    global pipe1
     
     global x
     global imagenmarioderecha
@@ -374,17 +549,20 @@ def destruirprueba():
     canvas.bind('<w>', jumpm)
     
     canvas.pack()
-    plat1= canvas.create_rectangle(1,595, 400, 620, fill= 'blue')
-    plat2= canvas.create_rectangle(820, 595, 1280, 620, fill='blue')
-    plat3= canvas.create_rectangle(1,455, 150, 480, fill='blue')
-    plat4= canvas.create_rectangle(1130,455,1280,480, fill='blue')
-    platcentro= canvas.create_rectangle(380,455,840,480,fill='blue')
-    mario= canvas.create_rectangle(0,670,51,720,fill=None,width=0 )
+    plat1= canvas.create_rectangle(1,415, 400, 440, fill= 'blue')
+    plat2= canvas.create_rectangle(820, 415, 1280, 440, fill='blue')
+    plat3= canvas.create_rectangle(1,275, 150, 300, fill='blue')
+    plat4= canvas.create_rectangle(1130,275,1280,300, fill='blue')
+    platcentro= canvas.create_rectangle(380,275,840,300,fill='blue')
+    plat5= canvas.create_rectangle(1,125, 550, 150, fill='blue')
+    plat6= canvas.create_rectangle(730, 125, 1280, 150, fill='blue')
+    mario= canvas.create_rectangle(0,490,51,540,fill=None,width=0 )
     imagenmarioderecha= PhotoImage(file='staleright.gif')
     imagenmarioizquierda= PhotoImage(file='staleleft.gif')
     imagenmariosaltoizquierda= PhotoImage(file='jumpleft.gif')
     imagenmariosaltoderecha=PhotoImage(file='jumpright.gif')
-    
+    texturaladrillo=PhotoImage(file='bricks.gif')
+    ladrillos=canvas.create_image(0,720,image=texturaladrillo, anchor= SW)
 
     coordsplat2x1=int(canvas.coords(plat2)[0])
     coordsplat2y1=int(canvas.coords(plat2)[1])+1
@@ -416,6 +594,16 @@ def destruirprueba():
     coordsplatcentroy1=int(canvas.coords(platcentro)[1])+1
     coordsplatcentrox2=int(canvas.coords(platcentro)[2])-2
     coordsplatcentroy2=int(canvas.coords(platcentro)[3])
+
+    coordsplat5x1=int(canvas.coords(plat5)[0])+2
+    coordsplat5y1=int(canvas.coords(plat5)[1])+1
+    coordsplat5x2=int(canvas.coords(plat5)[2])-2
+    coordsplat5y2=int(canvas.coords(plat5)[3])
+    coordsplat6x1=int(canvas.coords(plat6)[0])+2
+    coordsplat6y1=int(canvas.coords(plat6)[1])+1
+    coordsplat6x2=int(canvas.coords(plat6)[2])-2
+    coordsplat6y2=int(canvas.coords(plat6)[3])
+
     
     spritemario=canvas.create_image(coordsmariox1glob+25,coordsmarioy2glob-27, image=imagenmarioderecha)
 
