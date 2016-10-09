@@ -185,12 +185,7 @@ def jumpm(event):
     coords3m=coords1m
     moveupm()
     x.after(mseconds,bindit)
-def spawn_koopa1():
-    global estadokoopa1
-    if estadokoopa1== None:
-        global koopa1
-        koopa1=canvas.create_rectangle(100, 50, 130, 80, fill='green')
-        estadokoopa1='creado'
+
 
 
 def bindit():
@@ -357,7 +352,7 @@ def fallmplat6():
     coordsmarioy1= int(canvas.coords(mario)[1])
     coordsmariox2=int(canvas.coords(mario)[2])
     coordsmarioy2=int(canvas.coords(mario)[3])
-    if coordsmarioy2==coordsplatcentroy1:
+    if coordsmarioy2>=coordsplatcentroy1:
         if estadomario=='saltoizquierda':
             estadomario='izquierda'
             canvas.delete(spritemario)
@@ -481,6 +476,96 @@ def keym(event):
         canvas.move(mario, 20, 0)
         canvas.move(spritemario, 20, 0)
 
+
+
+
+def spawn_koopa1():
+    global estadokoopa1
+    if estadokoopa1== None:
+        global koopa1
+        koopa1=canvas.create_rectangle(100, 65, 130, coordsplat6y1, fill='green')
+        estadokoopa1='creado'
+        canvas.tag_lower(koopa1)
+        coordskoopa1x1=int(canvas.coords(koopa1)[0])
+        coordskoopa1y1=int(canvas.coords(koopa1)[1])
+        coordskoopa1x2=int(canvas.coords(koopa1)[2])
+        coordskoopa1y2=int(canvas.coords(koopa1)[3])
+        x.after(5000, spawn_koopa1)
+        x.after(2,koopa1_behaviour)
+    else:
+        x.after(5000,spawn_koopa1)
+
+def koopa1_behaviour():
+    global koopa1
+    global estadokoopa1
+    if estadokoopa1=='creado':
+        coordskoopa1x1=int(canvas.coords(koopa1)[0])
+        coordskoopa1y1=int(canvas.coords(koopa1)[1])
+        coordskoopa1x2=int(canvas.coords(koopa1)[2])
+        coordskoopa1y2=int(canvas.coords(koopa1)[3])
+        canvas.move(koopa1,5,0)
+        if coordskoopa1x2>=1280:
+            canvas.move(koopa1,-1280,0)
+        elif coordskoopa1x1<0:
+            canvas.move(koopa1,1280,0)
+        if coordskoopa1x1>coordsplat5x2 and coordskoopa1y2<=coordsplat5y1:
+            fallkoopaplat5()
+        elif coordskoopa1x1>coordsplatcentrox2 and coordskoopa1y2<=coordsplatcentroy1:
+            fallkoopaplatcentro()
+        elif coordskoopa1x1>coordsplat1x2 and coordskoopa1x2<coordsplat2x1 and (coordskoopa1y2<=coordsplat1y1 and coordskoopa1y2==coordsplat1y1):
+            fallkoopaplat1()
+    x.after(100,koopa1_behaviour)
+
+def fallkoopaplat5():
+    global koopa1
+    global spritemario
+    canvas.tag_raise(koopa1)
+    canvas.tag_raise(spritemario)
+    coordskoopa1x1=int(canvas.coords(koopa1)[0])
+    coordskoopa1y1= int(canvas.coords(koopa1)[1])
+    coordskoopa1x2=int(canvas.coords(koopa1)[2])
+    coordskoopa1y2=int(canvas.coords(koopa1)[3])
+    if coordskoopa1y2==coordsplatcentroy1:
+        return None
+    else:
+        x.after(2, fallkoopaplat5)
+        canvas.move(koopa1,0,2)
+        #canvas.move(spritemario,0,2)
+
+def fallkoopaplatcentro():
+    global koopa1
+    global spritemario
+    coordskoopa1x1=int(canvas.coords(koopa1)[0])
+    coordskoopa1y1= int(canvas.coords(koopa1)[1])
+    coordskoopa1x2=int(canvas.coords(koopa1)[2])
+    coordskoopa1y2=int(canvas.coords(koopa1)[3])
+    if coordskoopa1y2==coordsplat2y1:
+        return None
+    else:
+        x.after(2, fallkoopaplatcentro)
+        canvas.move(koopa1,0,2)
+        #canvas.move(spritemario,0,2)
+
+
+def fallkoopaplat1():
+    global koopa1
+    global spritemario
+    coordskoopa1x1=int(canvas.coords(koopa1)[0])
+    coordskoopa1y1= int(canvas.coords(koopa1)[1])
+    coordskoopa1x2=int(canvas.coords(koopa1)[2])
+    coordskoopa1y2=int(canvas.coords(koopa1)[3])
+    if coordskoopa1y2>537:
+        return None
+    else:
+        x.after(2, fallkoopaplat1)
+        canvas.move(koopa1,0,2)
+        #canvas.move(spritemario,0,2)
+
+
+
+
+        
+
 def destruirprueba():
     ventanprueb.destroy()
     global estadokoopa1
@@ -530,6 +615,11 @@ def destruirprueba():
     global coordsplat6y2
 
     global pipe1
+    global pipe1coordsx1
+    global pipe1coordsx2
+    global pipe1coordsy1
+    global pipe1coordsy2
+    global pipesprite1
     
     global x
     global imagenmarioderecha
@@ -539,7 +629,7 @@ def destruirprueba():
     global imagenmariosaltoizquierda
     global imagenmariosaltoderecha
     x= Crear_Ventana()
-    x.after(1000, spawn_koopa1)
+    x.after(5000, spawn_koopa1)
     estadokoopa1=None
     canvas= Canvas(x, width=1280, height=720)
     canvas.focus_set()
@@ -562,7 +652,10 @@ def destruirprueba():
     imagenmariosaltoizquierda= PhotoImage(file='jumpleft.gif')
     imagenmariosaltoderecha=PhotoImage(file='jumpright.gif')
     texturaladrillo=PhotoImage(file='bricks.gif')
+    pipeleft=PhotoImage(file='pipeleft.gif')
+    piperight=PhotoImage(file='piperight.gif')
     ladrillos=canvas.create_image(0,720,image=texturaladrillo, anchor= SW)
+    
 
     coordsplat2x1=int(canvas.coords(plat2)[0])
     coordsplat2y1=int(canvas.coords(plat2)[1])+1
@@ -578,6 +671,8 @@ def destruirprueba():
     coordsplat1y1=int(canvas.coords(plat1)[1])+1
     coordsplat1x2=int(canvas.coords(plat1)[2])-2
     coordsplat1y2=int(canvas.coords(plat1)[3])
+
+    
 
 
     coordsplat3x1=int(canvas.coords(plat3)[0])
@@ -604,8 +699,16 @@ def destruirprueba():
     coordsplat6x2=int(canvas.coords(plat6)[2])-2
     coordsplat6y2=int(canvas.coords(plat6)[3])
 
+    pipe1=canvas.create_rectangle(0, 20, 136, coordsplat6y1, fill=None, width=0)
+    pipe1coordsx1= int(canvas.coords(pipe1)[0])
+    pipe1coordsx2= int(canvas.coords(pipe1)[2])
+    pipe1coordsy1= int(canvas.coords(pipe1)[1])
+    pipe1coordsy2= int(canvas.coords(pipe1)[3])
+    pipesprite1=canvas.create_image(pipe1coordsx1+65,pipe1coordsy1+53, image=piperight)
+
     
     spritemario=canvas.create_image(coordsmariox1glob+25,coordsmarioy2glob-27, image=imagenmarioderecha)
+    
 
     x.mainloop()
 
