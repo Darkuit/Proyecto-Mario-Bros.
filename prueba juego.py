@@ -71,10 +71,19 @@ def moveupm():
         movedownm()
         return None
     elif coords1m==coordsplat5y2 and coordsmariox1<=coordsplat5x2:
-      time.sleep(0.01)
-      mseconds=100
-      movedownm()
-      return None
+        if estadokoopa1=='creado':
+            coordskoopa1x1=int(canvas.coords(koopa1)[0])
+            coordskoopa1y1=int(canvas.coords(koopa1)[1])
+            coordskoopa1x2=int(canvas.coords(koopa1)[2])
+            coordskoopa1y2=int(canvas.coords(koopa1)[3])
+            if coordskoopa1y2==coordsplat5y1 and coordskoopa1x1<coordsplat5x2:
+                overlaps=canvas.find_overlapping(coordskoopa1x1, coordskoopa1y2, coordskoopa1x2, coordsplat5y2+5)
+                if len(overlaps)>4:
+                    Koopa1_flip()
+        time.sleep(0.01)
+        mseconds=100
+        movedownm()
+        return None
     elif coords1m==coordsplat6y2 and coordsmariox2>=coordsplat6x1:
       time.sleep(0.01)
       mseconds=100
@@ -789,13 +798,13 @@ def destruirprueba():
     canvas.bind('<w>', jumpm)
     
     canvas.pack()
-    plat1= canvas.create_rectangle(1,415, 400, 440, fill= 'blue')
-    plat2= canvas.create_rectangle(820, 415, 1280, 440, fill='blue')
-    plat3= canvas.create_rectangle(1,275, 150, 300, fill='blue')
-    plat4= canvas.create_rectangle(1130,275,1280,300, fill='blue')
-    platcentro= canvas.create_rectangle(380,275,840,300,fill='blue')
-    plat5= canvas.create_rectangle(1,125, 550, 150, fill='blue')
-    plat6= canvas.create_rectangle(730, 125, 1280, 150, fill='blue')
+    plat1= canvas.create_rectangle(1,415, 400, 440, fill= 'brown')
+    plat2= canvas.create_rectangle(820, 415, 1280, 440, fill='brown')
+    plat3= canvas.create_rectangle(1,275, 150, 300, fill='brown')
+    plat4= canvas.create_rectangle(1130,275,1280,300, fill='brown')
+    platcentro= canvas.create_rectangle(380,275,840,300,fill='brown')
+    plat5= canvas.create_rectangle(1,125, 550, 150, fill='brown')
+    plat6= canvas.create_rectangle(730, 125, 1280, 150, fill='brown')
     mario= canvas.create_rectangle(0,490,51,540,fill=None,width=0 )
     imagenmarioderecha= PhotoImage(file='staleright.gif')
     imagenmarioizquierda= PhotoImage(file='staleleft.gif')
@@ -804,7 +813,9 @@ def destruirprueba():
     texturaladrillo=PhotoImage(file='bricks.gif')
     pipeleft=PhotoImage(file='pipeleft.gif')
     piperight=PhotoImage(file='piperight.gif')
-    ladrillos=canvas.create_image(0,720,image=texturaladrillo, anchor= SW)
+    back=PhotoImage(file='background.gif')
+    background=canvas.create_image(0,0,image=back, anchor=NW)
+    canvas.tag_lower(background)
 
 
     koopastale=PhotoImage(file='koopastale.gif')
