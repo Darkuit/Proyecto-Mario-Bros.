@@ -671,7 +671,7 @@ def respawnmario():
     
     
 ###########################ENEMIGOS################################
-#########################KOOPA TROOPA##############################
+
 def spawn_monster():
     global estadokoopa1
     global monstruos
@@ -708,7 +708,7 @@ def spawn_monster():
             paratroopa=canvas.create_rectangle(1140, 75, 1180, coordsplat6y1, fill=None, width=1)
             estadoparatroopa='creado'
             
-
+#########################KOOPA TROOPA##############################
 def koopa1_behaviour():
     global koopa1
     global estadokoopa1
@@ -941,7 +941,6 @@ def koopadie():
 
 
 
-
 ######Funcionalidad Varia#####
 
 
@@ -954,13 +953,122 @@ def bindings():
     
 
 
+def menuinic(event):
+    print('menu')
+    global state
+    global men
+    global menuopt
+    global menuini
+    global dif1
+    global txt
+    if event.char=='s':
+        print('s')
+        print(state)
+        if state==0:
+            menu.delete(men)
+            men=menu.create_image(0,0,image=menuopt, anchor=NW)
+            state+=1
+        elif state==1:
+            menu.delete(men)
+            men=menu.create_image(0,0,image=menuini,anchor=NW)
+            state-=1
+    elif event.char=='w':
+        print(state)
+        if state==0:
+            menu.delete(men)
+            men=menu.create_image(0,0,image=menuopt, anchor=NW)
+            state+=1
+        elif state==1:
+            menu.delete(men)
+            men=menu.create_image(0,0,image=menuini, anchor=NW)
+            state-=1
+    else:
+        print(state)
+        if state==1:
+            menu.delete(men)
+            men=menu.create_image(0,0,image=dif1,anchor=NW)
+            menu.bind('<s>', ignore)
+            menu.bind('<w>', ignore)
+            menu.bind('<Return>', dif)
+            menu.bind('<a>', dif)
+            menu.bind('<d>', dif)
+        elif state==0:
+            menu.delete(men)
+            men=menu.create_image(0,0,image=nametype, anchor=NW)
+            menu.bind('<s>', ignore)
+            menu.bind('<w>', ignore)
+            menu.bind('<Return>', destruirprueba)
+            menu.bind('<a>', ignore)
+            menu.bind('<d>', ignore)
+            txt=Entry(menu, textvariable=nombre1)
+            bot=Button(menu, text='Lets go!', command=destruirprueba)
+            menu.create_window(700,360, window=bot)
+            menu.create_window(600, 360, window=txt)
+            
+
+def dif(event):
+    global difficulty
+    global men
+    global dif1
+    global dif2
+    global dif3
+    global dif4
+    global dif5
+    global state
+    if event.char=='d':
+        print(difficulty)
+        if difficulty ==5:
+            menu.delete(men)
+            men=menu.create_image(0,0,image=dif1, anchor=NW)
+            difficulty=1
+        else:
+            menu.delete(men)
+            if difficulty==1:
+                men=menu.create_image(0,0,image=dif2, anchor=NW)
+            elif difficulty ==2:
+                men=menu.create_image(0,0,image=dif3, anchor=NW)
+            elif difficulty==3:
+                men=menu.create_image(0,0,image=dif4, anchor=NW)
+            elif difficulty==4:
+                men=menu.create_image(0,0,image=dif5, anchor=NW)
+            difficulty+=1
+    elif event.char=='a':
+        print(difficulty)
+        if difficulty ==1:
+            menu.delete(men)
+            men=menu.create_image(0,0,image=dif5, anchor=NW)
+            difficulty=5
+        else:
+            menu.delete(men)
+            if difficulty==5:
+                men=menu.create_image(0,0,image=dif4, anchor=NW)
+            elif difficulty ==2:
+                men=menu.create_image(0,0,image=dif1, anchor=NW)
+            elif difficulty==3:
+                men=menu.create_image(0,0,image=dif2, anchor=NW)
+            elif difficulty==4:
+                men=menu.create_image(0,0,image=dif3, anchor=NW)
+            difficulty-=1
+    else:
+        menu.bind('<a>', ignore)
+        menu.bind('<d>', ignore)
+        menu.bind('<w>', menuinic)
+        menu.bind('<s>', menuinic)
+        menu.bind('<Return>', menuinic)
+        state=0
+        menu.delete(men)
+        men=menu.create_image(0,0,image=menuini, anchor=NW)
+        
     
+        
 
 
 
         
 
 def destruirprueba():
+    global nombre1
+    global txt
     ventanprueb.destroy()
     global estadokoopa1
     global canvas
@@ -1063,6 +1171,12 @@ def destruirprueba():
     canvas.bind('<a>', keym)
     canvas.bind('<d>', keym)
     canvas.bind('<w>', jumpm)
+    canvas.bind('<Return>', ignore)
+    q=nombre1.get()
+    nomb1=Label(canvas, text=q, fg='white', bg='black')
+    print(nombre1.get())
+    nomb1.pack()
+    canvas.create_window(50,600,window=nomb1)
     mario= canvas.create_rectangle(0,490,51,540,fill=None,width=0 )
     
     canvas.pack()
@@ -1179,11 +1293,29 @@ def destruirprueba():
 
     x.mainloop()
 
-
+#######Menu Inicial######
 ventanprueb=Tk()
-ventanprueb.geometry('200x300')
-Bot21= Button(ventanprueb,text='holi', command=destruirprueba)
-Bot21.pack(side=TOP)
+ventanprueb.title('game')
+menu=Canvas(ventanprueb, width=1280, height=720)
+menuini=PhotoImage(file='menusp.gif')
+menuopt=PhotoImage(file='menuopt.gif')
+dif1=PhotoImage(file='dif1.gif')
+dif2=PhotoImage(file='dif2.gif')
+dif3=PhotoImage(file='dif3.gif')
+dif4=PhotoImage(file='dif4.gif')
+dif5=PhotoImage(file='dif5.gif')
+nametype=PhotoImage(file='nametype.gif')
+state=0
+menu.pack()
+menu.focus_set()
+men=menu.create_image(0,0,image=menuini, anchor=NW)
+menu.bind('<s>', menuinic)
+menu.bind('<w>', menuinic)
+menu.bind('<Return>', menuinic)
+menu.bind('<a>', ignore)
+menu.bind('<d>', ignore)
+difficulty=1
+nombre1=StringVar()
 ventanprueb.mainloop()
 
 
