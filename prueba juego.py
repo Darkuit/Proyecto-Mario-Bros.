@@ -1,6 +1,8 @@
 from tkinter import *
 import time
 import random
+import winsound
+import threading
 def Crear_Ventana():
     ventan=Tk()
     ventan.title('Game')
@@ -115,7 +117,7 @@ def movedownm():
        coordskoopa1y2=int(canvas.coords(koopa1)[3])
        overlaps=canvas.find_overlapping(coordskoopa1x1,coordskoopa1y1,coordskoopa1x2,coordskoopa1y2)
        if coordskoopa1y2>537 and coordskoopa1y2<=540:
-           if ((coordsmarioy2-1>=coordskoopa1y1-5 and coordsmarioy2<=coordskoopa1y1)) and len(overlaps)>=3:
+           if ((coordsmarioy2-1>=coordskoopa1y1-5 and coordsmarioy2<=coordskoopa1y1)) and len(overlaps)>=4:
                print('splat')
                Koopa1_flip()
                mbounce()
@@ -589,20 +591,29 @@ def mhitkoopa(orient):
         x.after(200, mariohitright)
         x.after(200, koopadie)
 def mariohitleft():
-    global imagenmariohitizquierda
-    global estadomario
-    global spritemario
+    global imagenmariohitizquierda, estadomario, spritemario, score1p, vidas1
+    
     coordsmariox1=int(canvas.coords(mario)[0])
     coordsmarioy1= int(canvas.coords(mario)[1])
     coordsmariox2=int(canvas.coords(mario)[2])
     coordsmarioy2=int(canvas.coords(mario)[3])
     if estadomario=='izquierda':
+
         canvas.delete(spritemario)
         spritemario=canvas.create_image(coordsmariox1+25, coordsmarioy2-27, image=imagenmariohitizquierda)
+        score1p.set(score1p.get()+100)
+        print(score1p.get())
+        if score1p == 5000:
+            vidas+=1
+            score1p.set(0)
+        
+        
+        
 def mariohitright():
     global imagenmariohitderecha
     global estadomario
     global spritemario
+    global score1p
     coordsmariox1=int(canvas.coords(mario)[0])
     coordsmarioy1= int(canvas.coords(mario)[1])
     coordsmariox2=int(canvas.coords(mario)[2])
@@ -610,7 +621,12 @@ def mariohitright():
     if estadomario=='derecha':
         canvas.delete(spritemario)
         spritemario=canvas.create_image(coordsmariox1+25, coordsmarioy2-27, image=imagenmariohitderecha)
-
+        score1p.set(score1p.get()+100)
+        print(score1p)
+        if score1p == 5000:
+            vidas+=1
+            score1p.set(0)
+        
 def mariodie():
     global estadomario
     global spritemario
@@ -676,7 +692,18 @@ def spawn_monster():
     global estadokoopa1
     global monstruos
     global estadoparatroopa
+    global difficulty
     tipo=1 #random.randint(1,2)
+    if difficulty==1:
+        d=0
+    elif difficulty==2:
+        d=1000
+    elif difficulty==3:
+        d=2000
+    elif difficulty==4:
+        d=3500
+    elif difficulty==5:
+        d=6000
     if tipo==1:
         if estadokoopa1== None and monstruos>0:
             global koopa1
@@ -696,10 +723,10 @@ def spawn_monster():
 
             monstruos-=1
             
-            x.after(15000, spawn_monster)
+            x.after(15000-d, spawn_monster)
             x.after(2,koopa1_behaviour)
         else:
-            x.after(15000,spawn_monster)
+            x.after(15000-d,spawn_monster)
     elif tipo == 2:
         if estadoparatroopa==None and monstruos>0:
             global paratroopa
@@ -717,7 +744,18 @@ def koopa1_behaviour():
     global koopastep
     global koopaanim
     global estadomario
-    
+    global difficulty
+
+    if difficulty==1:
+        d=200
+    elif difficulty==2:
+        d=150
+    elif difficulty==3:
+        d=100
+    elif difficulty==4:
+        d=50
+    elif difficulty==5:
+        d=0
     if estadokoopa1=='creado':
         coordskoopa1x1=int(canvas.coords(koopa1)[0])
         coordskoopa1y1=int(canvas.coords(koopa1)[1])
@@ -735,11 +773,8 @@ def koopa1_behaviour():
             coordsmarioy2=int(canvas.coords(mario)[3])
             overlaps=canvas.find_overlapping(coordskoopa1x1,coordskoopa1y1,coordskoopa1x2,coordskoopa1y2)
             if coordskoopa1y2>537 and coordskoopa1y2<=540 and coordsmarioy2>537 and coordsmarioy2<=540 and len(overlaps)>=4 and coordskoopa1x1>pipe1coordsx2+20 and ((coordsmariox1<= coordskoopa1x2+5) or (coordsmariox2>=coordskoopa1x1-5)):
-                print('tru1')
                 mariodie()
             elif coordskoopa1y2<537 and coordsmarioy2<=coordskoopa1y2 and coordsmarioy2> coordskoopa1y1 and len(overlaps)>5 and ((coordsmariox1<= coordskoopa1x2+5 and coordsmariox1 >=coordskoopa1x1) or (coordsmariox2>=coordskoopa1x1-5 and coordsmariox2<=coordskoopa1x2)):
-                print((coordsmariox2>=coordskoopa1x1-5))
-                print('tru2')
                 mariodie()
                 
                                                                                                                                
@@ -765,7 +800,7 @@ def koopa1_behaviour():
             fallkoopaplat1()
     elif estadokoopa1=='volteado':
         return None
-    x.after(100,koopa1_behaviour)
+    x.after(100+d,koopa1_behaviour)
 
 def Koopa1_flip():
     global koopa1
@@ -838,7 +873,7 @@ def unflipkoopa():
     
     canvas.delete(koopa1)
     canvas.delete(spritekoopa)
-    koopa1=canvas.create_rectangle(coordskoopa1x1+5, coordskoopa1y1-10, coordskoopa1x2-5, coordskoopa1y2)
+    koopa1=canvas.create_rectangle(coordskoopa1x1+5, coordskoopa1y1-10, coordskoopa1x2-5, coordskoopa1y2, width=0)
     coordskoopa1x1=int(canvas.coords(koopa1)[0])
     coordskoopa1y1= int(canvas.coords(koopa1)[1])
     coordskoopa1x2=int(canvas.coords(koopa1)[2])
@@ -950,7 +985,10 @@ def bindings():
     canvas.bind('<w>', jumpm)
     
     
-    
+def Initialmusic():
+    winsound.PlaySound('Menu.wav', winsound.SND_ASYNC)
+def mainmusic():
+    winsound.PlaySound('Maint.wav', winsound.SND_ASYNC|winsound.SND_LOOP)
 
 
 def menuinic(event):
@@ -1004,7 +1042,8 @@ def menuinic(event):
             bot=Button(menu, text='Lets go!', command=destruirprueba)
             menu.create_window(700,360, window=bot)
             menu.create_window(600, 360, window=txt)
-            
+    
+
 
 def dif(event):
     global difficulty
@@ -1067,8 +1106,7 @@ def dif(event):
         
 
 def destruirprueba():
-    global nombre1
-    global txt
+    global nombre1, score1p, scorep1, vidas1
     ventanprueb.destroy()
     global estadokoopa1
     global canvas
@@ -1160,24 +1198,34 @@ def destruirprueba():
     global mariodeadright
 
     global background
+
+    global musica1
     x= Crear_Ventana()
+    mainm=threading.Thread(target=mainmusic)
+    mainm.start()
     x.after(5000, spawn_monster)
     estadokoopa1=None
     estadoparatroopa=None
     canvas= Canvas(x, width=1280, height=720)
     canvas.focus_set()
-    monstruos=4 #No. de monstruos en el nivel
+    monstruos=4+difficulty #No. de monstruos en el nivel
     estadomario='derecha'
     canvas.bind('<a>', keym)
     canvas.bind('<d>', keym)
     canvas.bind('<w>', jumpm)
     canvas.bind('<Return>', ignore)
-    q=nombre1.get()
-    nomb1=Label(canvas, text=q, fg='white', bg='black')
+    q1=nombre1.get()
+    nomb1=Label(canvas, text=q1, fg='white', bg='black')
+    score1p=IntVar()
+    scorep1=Label(canvas, textvariable=score1p, fg='white', bg='black')
+    canvas.create_window(100, 600, window=scorep1)
     print(nombre1.get())
     nomb1.pack()
     canvas.create_window(50,600,window=nomb1)
     mario= canvas.create_rectangle(0,490,51,540,fill=None,width=0 )
+
+    
+    vidas1=4
     
     canvas.pack()
 
@@ -1294,6 +1342,8 @@ def destruirprueba():
     x.mainloop()
 
 #######Menu Inicial######
+
+
 ventanprueb=Tk()
 ventanprueb.title('game')
 menu=Canvas(ventanprueb, width=1280, height=720)
@@ -1314,6 +1364,8 @@ menu.bind('<w>', menuinic)
 menu.bind('<Return>', menuinic)
 menu.bind('<a>', ignore)
 menu.bind('<d>', ignore)
+musica1=threading.Thread(target=Initialmusic)
+musica1.start()
 difficulty=1
 nombre1=StringVar()
 ventanprueb.mainloop()
