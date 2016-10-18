@@ -30,6 +30,7 @@ def moveupm():
                 overlaps=canvas.find_overlapping(coordskoopa1x1, coordskoopa1y2, coordskoopa1x2, coordsplat1y2+5)
                 if len(overlaps)>4:
                     Koopa1_flip()
+            
         time.sleep(0.01)
         mseconds=100
         movedownm()
@@ -693,7 +694,7 @@ def spawn_monster():
     global monstruos
     global estadoparatroopa
     global difficulty
-    tipo=1 #random.randint(1,2)
+    tipo= random.randint(1,2)
     if difficulty==1:
         d=0
     elif difficulty==2:
@@ -732,9 +733,256 @@ def spawn_monster():
             global paratroopa
             global paratroopastale
             global spriteparatroopa
-            paratroopa=canvas.create_rectangle(1140, 75, 1180, coordsplat6y1, fill=None, width=1)
+            global paratroopaanim
+            paratroopa=canvas.create_rectangle(1140, 75, 1180, coordsplat6y1, fill=None, width=0)
             estadoparatroopa='creado'
+            paratroopaanim=1
+            coordsparatroopax1=int(canvas.coords(paratroopa)[0])
+            coordsparatroopay1=int(canvas.coords(paratroopa)[1])
+            coordsparatroopax2=int(canvas.coords(paratroopa)[2])
+            coordsparatroopay2=int(canvas.coords(paratroopa)[3])
+            spriteparatroopa=canvas.create_image(coordsparatroopax1+24, coordsparatroopay1+25, image=paratroopastale)
+
+            canvas.tag_lower(paratroopa)
+            monstruos-=1
+            x.after(15000-d,spawn_monster)
+            x.after(5, paratroopabehaviour)
+        else:
+            x.after(15000-d, spawn_monster)
             
+
+
+
+########Kooopa Paratroopa########
+
+def paratroopabehaviour():
+    global paratroopa
+    global estadoparatroopa
+    global spriteparatroopa
+    global paratroopastale
+    global paratroopaflap
+    global estadomario
+    global difficulty
+    global referenceparat
+    global referenceparat2
+    global parabolestate
+
+
+
+    if estadoparatroopa=='creado':
+        coordsparatroopax1=int(canvas.coords(paratroopa)[0])
+        coordsparatroopay1=int(canvas.coords(paratroopa)[1])
+        coordsparatroopax2=int(canvas.coords(paratroopa)[2])
+        coordsparatroopay2=int(canvas.coords(paratroopa)[3])
+        referenceparat=coordsparatroopay1-50
+        referenceparat2=coordsparatroopay1
+        parabolestate=True
+        x.after(5, paratroopamovement)
+
+def paratroopamovement():
+    global paratroopa
+    global estadoparatroopa
+    global spriteparatroopa
+    global referenceparat
+    global referenceparat2
+    global paratroopaflap
+    global paratroopastale
+    global paratroopaanim
+    global parabolestate
+    global difficulty
+
+
+    if estadoparatroopa=='creado':
+        coordsparatroopax1=int(canvas.coords(paratroopa)[0])
+        coordsparatroopay1=int(canvas.coords(paratroopa)[1])
+        coordsparatroopax2=int(canvas.coords(paratroopa)[2])
+        coordsparatroopay2=int(canvas.coords(paratroopa)[3])
+        if paratroopaanim==1:
+            canvas.delete(spriteparatroopa)
+            spriteparatroopa=canvas.create_image(coordsparatroopax1+24, coordsparatroopay1+25, image=paratroopaflap)
+            paratroopaanim -=1
+        elif paratroopaanim==0:
+            canvas.delete(spriteparatroopa)
+            spriteparatroopa=canvas.create_image(coordsparatroopax1+24, coordsparatroopay1+25, image=paratroopastale)
+            paratroopaanim+=1
+        if difficulty==1:
+            d=200
+        elif difficulty==2:
+            d=150
+        elif difficulty==3:
+            d=100
+        elif difficulty==4:
+            d=50
+        elif difficulty==5:
+            d=0
+            
+
+        if coordsparatroopay1>referenceparat and parabolestate:
+            if coordsparatroopax1<0:
+                canvas.move(paratroopa, 1280, 0)
+            canvas.move(paratroopa, -5,-5)
+            canvas.move(spriteparatroopa, -5, -5)
+            x.after(100+d, paratroopamovement)
+        else:
+            if coordsparatroopax1<0:
+                canvas.move(paratroopa, 1280, 0)
+            if coordsparatroopay1==referenceparat2:
+                parabolestate=True
+                x.after(1500+d, paratroopabehaviour)
+                return None
+            elif coordsparatroopay1==referenceparat:
+                canvas.move(paratroopa, -5, 5)
+                parabolestate=False
+                x.after(100+d, paratroopamovement)
+            elif coordsparatroopay1<referenceparat2:
+                canvas.move(paratroopa, -5, 5)
+                canvas.move(spriteparatroopa, -5, 5)
+                x.after(100+d, paratroopamovement)
+                
+def flipparatroopa():
+    global paratroopa
+    global estadoparatroopa
+    global spriteparatroopa
+    global paratroopaflipped
+    global background
+    global paratroopaflippedanim
+    
+    coordsparatroopax1=int(canvas.coords(paratroopa)[0])
+    coordsparatroopay1=int(canvas.coords(paratroopa)[1])
+    coordsparatroopax2=int(canvas.coords(paratroopa)[2])
+    coordsparatroopay2=int(canvas.coords(paratroopa)[3])
+    estadoparatroopa='volteado'
+    canvas.delete(paratroopa)
+    canvas.delete(paratroopa)
+    koopa1=canvas.create_rectangle(coordsparatroopax1-5,coordsparatroopay1+10,coordsparatroopax2+5,coordsparatroopay2,width=0)
+    coordsparatroopa1x1=int(canvas.coords(paratroopa)[0])
+    coordskoopa1y1= int(canvas.coords(paratroopa)[1])
+    coordskoopa1x2=int(canvas.coords(paratroopa)[2])
+    coordskoopa1y2=int(canvas.coords(paratroopa)[3])
+    spriteparatroopa=canvas.create_image(coordsparatroopax1+26, coordsparatroopay1+20, image=paratroopaflipped)
+    paratroopaflippedanim=1
+    canvas.tag_lower(spriteparatroopa)
+    canvas.tag_lower(background)
+    x.after(500, changeflipparatroopa)
+    x.after(15000, unflipparatroopa)
+
+def changeflipparatroopa():
+    global estadoparatroopa
+    global spriteparatroopa
+    global paratroopaflipped
+    global paratroopaflipped2
+    global paratroopaflippedanim
+    global estadoparatroopa
+    global background
+    coordsparatroopax1=int(canvas.coords(paratroopa)[0])
+    coordsparatroopay1= int(canvas.coords(paratroopa)[1])
+    coordsparatroopax2=int(canvas.coords(paratroopa)[2])
+    coordsparatroopay2=int(canvas.coords(paratroopa)[3])
+    if estadoparatroopa!='volteado':
+        return None
+    else:
+        if paratroopaflippedanim==1:
+            canvas.delete(spriteparatroopa)
+            spriteparatroopa= canvas.create_image(coordsparatroopax1+26, coordsparatroopay1+20, image=paratroopaflipped2)
+            canvas.tag_lower(spritepratroopa)
+            canvas.tag_lower(background)
+            paratroopaflippedanim-=1
+        elif koopaflippedanim==0:
+            canvas.delete(spriteparatroopa)
+            spriteparatroopa= canvas.create_image(coordsparatroopax1+26, coordsparatroopay1+20, image=paratroopaflipped)
+            canvas.tag_lower(spriteparatroopa)
+            canvas.tag_lower(background)
+            paratroopaflippedanim+=1
+        x.after(500, changeflipparatroopa)
+def unflipparatroopa():
+    global estadoparatroopa
+    global spriteparatroopa
+    global paratroopastale
+    global paratroopa
+    coordsparatroopax1=int(canvas.coords(paratroopa)[0])
+    coordsparatroopay1= int(canvas.coords(paratroopa)[1])
+    coordsparatroopax2=int(canvas.coords(paratroopa)[2])
+    coordsparatroopay2=int(canvas.coords(paratroopa)[3])
+    if estadoparatroopa!='volteado':
+        return None
+    
+    canvas.delete(paratroopa)
+    canvas.delete(spriteparatroopa)
+    paratroopa=canvas.create_rectangle(coordsparatroopax1+5, coordsparatroopay1-10, coordsparatroopax2-5, coordsparatroopay2, width=0)
+    coordsparatroopax1=int(canvas.coords(paratroopa)[0])
+    coordsparatroopay1= int(canvas.coords(paratroopa)[1])
+    coordsparatroopax2=int(canvas.coords(paratroopa)[2])
+    coordsparatroopay2=int(canvas.coords(paratroopa)[3])
+    spriteparatroopa=canvas.create_image(coordsparatroopax1+24,coordsparatroopay1+25, image=paratroopastale)
+    estadoparatroopa='creado'
+    x.after(2, paratroopabehaviour)
+
+def paratroopadie():
+    global estadoparatroopa
+    global spriteparatroopa
+    global paratroopa
+    global estadoparatroopa
+    if estadoparatroopa==None:
+        return None
+    else:
+        coordsparatroopay1= int(canvas.coords(paratroopa)[1])
+        if coordsparatroopay1>720:
+            canvas.delete(spriteparatroopa)
+            canvas.delete(paratroopa)
+            estadoparatroopa=None
+        else:
+
+            canvas.move(paratroopa,0,2)
+            canvas.move(spriteparatroopa,0,2)
+            x.after(4, paratroopadie)
+
+def fallparatroopaplat6():
+    global paratroopa
+    global spriteparatroopa
+    canvas.tag_raise(paratroopa)
+    canvas.tag_raise(spritemario)
+    coordsparatroopax1=int(canvas.coords(paratroopa)[0])
+    coordsparatroopay1= int(canvas.coords(paratroopa)[1])
+    coordsparatroopax2=int(canvas.coords(paratroopa)[2])
+    coordsparatroopay2=int(canvas.coords(paratroopa)[3])
+    if coordsparatroopay2==coordsplatcentroy1:
+        return None
+    else:
+        x.after(2, fallparatroopaplat6)
+        canvas.move(paratroopa,0,2)
+        canvas.move(spriteparatroopa,0,2)
+
+def fallkoopaplatcentro():
+    global koopa1
+    global spritekoopa
+    coordskoopa1x1=int(canvas.coords(koopa1)[0])
+    coordskoopa1y1= int(canvas.coords(koopa1)[1])
+    coordskoopa1x2=int(canvas.coords(koopa1)[2])
+    coordskoopa1y2=int(canvas.coords(koopa1)[3])
+    if coordskoopa1y2==coordsplat2y1:
+        return None
+    else:
+        x.after(2, fallkoopaplatcentro)
+        canvas.move(koopa1,0,2)
+        canvas.move(spritekoopa,0,2)
+
+
+def fallkoopaplat1():
+    global koopa1
+    global spritekoopa
+    coordskoopa1x1=int(canvas.coords(koopa1)[0])
+    coordskoopa1y1= int(canvas.coords(koopa1)[1])
+    coordskoopa1x2=int(canvas.coords(koopa1)[2])
+    coordskoopa1y2=int(canvas.coords(koopa1)[3])
+    if coordskoopa1y2>537:
+        return None
+    else:
+        x.after(2, fallkoopaplat1)
+        canvas.move(koopa1,0,2)
+        canvas.move(spritekoopa,0,2)
+
+
+    
 #########################KOOPA TROOPA##############################
 def koopa1_behaviour():
     global koopa1
@@ -939,40 +1187,26 @@ def koopadie():
     global refkoopa
     if estadokoopa1==None:
         return None
-    elif estadokoopa1=='creado':
-        coordskoopa1x1=int(canvas.coords(koopa1)[0])
-        coordskoopa1y1= int(canvas.coords(koopa1)[1])
-        coordskoopa1x2=int(canvas.coords(koopa1)[2])
-        coordskoopa1y2=int(canvas.coords(koopa1)[3])
-        if coordskoopa1y2<=540:
-            if coordskoopa1y2<coordsplat1y1:
-                fallkoopaplat1()
-                return None
-            else:
-                return None
     else:
+        estadokoopa1='atacado'
         coordskoopa1x1=int(canvas.coords(koopa1)[0])
         coordskoopa1y1= int(canvas.coords(koopa1)[1])
         coordskoopa1x2=int(canvas.coords(koopa1)[2])
         coordskoopa1y2=int(canvas.coords(koopa1)[3])
-        if coordskoopa1y2>coordsreferencekoopa and refkoopa==0:
-            estadokoopa1='atacado'
-            canvas.move(koopa1, 0, -2)
-            canvas.move(spritekoopa, 0, 2)
-            x.after(4, koopadie)
-        elif coordskoopa1y1>720:
+        if coordskoopa1y1>720:
 
-            estadokoopa1='atacado'
         
             canvas.delete(spritekoopa)
             canvas.delete(koopa1)
             estadokoopa1=None
             refkoopa=0
         else:
-            refkoopa=1
+
+
             canvas.move(koopa1,0,2)
             canvas.move(spritekoopa,0,2)
             x.after(4, koopadie)
+
 
 
 
@@ -1326,12 +1560,28 @@ def destruirprueba():
     pipe1coordsy2= int(canvas.coords(pipe1)[3])
     pipesprite1=canvas.create_image(pipe1coordsx1+65,pipe1coordsy1+53, image=piperight)
 
-    pipe2=canvas.create_rectangle(1145,20, 1280, coordsplat6y1, fill=None, width=1)
+    pipe2=canvas.create_rectangle(1145,20, 1280, coordsplat6y1, fill=None, width=0)
     pipe2coordsx1= int(canvas.coords(pipe2)[0])
     pipe2coordsx2= int(canvas.coords(pipe2)[2])
     pipe2coordsy1= int(canvas.coords(pipe2)[1])
     pipe2coordsy2= int(canvas.coords(pipe2)[3])
-    pipesprite1=canvas.create_image(pipe2coordsx1+65,pipe2coordsy1+53, image=pipeleft)
+    pipesprite2=canvas.create_image(pipe2coordsx1+65,pipe2coordsy1+53, image=pipeleft)
+
+    pipe3=canvas.create_rectangle(0,445, 136, 560, fill=None, width=1)
+    pipe3coordsx1= int(canvas.coords(pipe3)[0])
+    pipe3coordsx2= int(canvas.coords(pipe3)[2])
+    pipe3coordsy1= int(canvas.coords(pipe3)[1])
+    pipe3coordsy2= int(canvas.coords(pipe3)[3])
+    pipesprite3=canvas.create_image(pipe3coordsx1+65,pipe3coordsy1+53, image=piperight)
+
+    pipe4=canvas.create_rectangle(1145,445, 1280, 560, fill=None, width=1)
+    pipe4coordsx1= int(canvas.coords(pipe4)[0])
+    pipe4coordsx2= int(canvas.coords(pipe4)[2])
+    pipe4coordsy1= int(canvas.coords(pipe4)[1])
+    pipe4coordsy2= int(canvas.coords(pipe4)[3])
+    pipesprite4=canvas.create_image(pipe4coordsx1+65,pipe4coordsy1+53, image=pipeleft)
+
+    
 
     
     spritemario=canvas.create_image(coordsmariox1glob+25,coordsmarioy2glob-27, image=imagenmarioderecha)
