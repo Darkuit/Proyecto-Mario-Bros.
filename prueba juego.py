@@ -908,7 +908,7 @@ def spawn_monster():
     global difficulty
     global estadoshadow
 
-    tipo=1 #random.randint(1,4)
+    tipo= random.randint(1,4)
     if difficulty==1:
         d=0
     elif difficulty==2:
@@ -1107,9 +1107,11 @@ def paratroopamovement():
             coordsparatroopax2=int(canvas.coords(paratroopa)[2])
             coordsparatroopay2=int(canvas.coords(paratroopa)[3])
             spriteparatroopa=canvas.create_image(coordsparatroopax1+24, coordsparatroopay1+25, image=paratroopastale)
+            x.after(1500+d, paratroopabehaviour)
+            
 
             score1p.set(score1p.get()-100)
-
+            return None
         if coordsparatroopay1>referenceparat and parabolestate:
             if coordsparatroopax1<0:
                 canvas.move(paratroopa, 1280, 0)
@@ -1600,7 +1602,7 @@ def shybehaviour():
                 freezemario()
             elif coordsshyy2<537 and coordsmarioy2<=coordsshyy2 and coordsmarioy2> coordsshyy1 and len(overlaps)>5 and ((coordsmariox1<= coordsshyx2+5 and coordsmariox1 >=coordsshyx1) or (coordsmariox2>=coordsshyx1-5 and coordsmariox2<=coordsshyx2)):
                 freezemario()
-        if coordsshyx1>pipe2coordsx1 and coordsshy2>537:
+        if coordsshyx1>pipe2coordsx1 and coordsshyy2>537:
             canvas.delete(shy)
             canvas.delete(spriteshy)
             shy=canvas.create_rectangle(100, 75, 140, coordsplat6y1, fill=None,width=0)
@@ -1997,7 +1999,19 @@ def koopadie():
             x.after(4, koopadie)
 
 
+###########POWER STAR################
+def SpawnPowerStar():
+    global estadopower
+    global powersprite
+    global power
+    global spritepower
 
+    if estadopower==None:
+        estadopower='creado'
+        power=canvas.create_rectangle(coordsplat1x1+175, coordsplat1y1-85, coordsplat1x1+225, coordsplat1y1-45)
+        spritepower=canvas.create_image(coordsplat1x1+200, coordsplat1y1-65,image=powersprite)
+        
+        
 
 ######Funcionalidad Varia#####
 
@@ -2015,7 +2029,7 @@ def mainmusic():
 
 
 def menuinic(event):
-    print('menu')
+    
     global state
     global men
     global menuopt
@@ -2023,8 +2037,8 @@ def menuinic(event):
     global dif1
     global txt
     if event.char=='s':
-        print('s')
-        print(state)
+        
+
         if state==0:
             menu.delete(men)
             men=menu.create_image(0,0,image=menuopt, anchor=NW)
@@ -2034,7 +2048,7 @@ def menuinic(event):
             men=menu.create_image(0,0,image=menuini,anchor=NW)
             state-=1
     elif event.char=='w':
-        print(state)
+        
         if state==0:
             menu.delete(men)
             men=menu.create_image(0,0,image=menuopt, anchor=NW)
@@ -2044,7 +2058,7 @@ def menuinic(event):
             men=menu.create_image(0,0,image=menuini, anchor=NW)
             state-=1
     else:
-        print(state)
+        
         if state==1:
             menu.delete(men)
             men=menu.create_image(0,0,image=dif1,anchor=NW)
@@ -2078,7 +2092,6 @@ def dif(event):
     global dif5
     global state
     if event.char=='d':
-        print(difficulty)
         if difficulty ==5:
             menu.delete(men)
             men=menu.create_image(0,0,image=dif1, anchor=NW)
@@ -2095,7 +2108,7 @@ def dif(event):
                 men=menu.create_image(0,0,image=dif5, anchor=NW)
             difficulty+=1
     elif event.char=='a':
-        print(difficulty)
+        
         if difficulty ==1:
             menu.delete(men)
             men=menu.create_image(0,0,image=dif5, anchor=NW)
@@ -2242,6 +2255,9 @@ def destruirprueba():
 
     global background
     global addscore
+    global estadopower
+    global powersprite
+    global powerup
 
     global musica1
     x= Crear_Ventana()
@@ -2253,6 +2269,9 @@ def destruirprueba():
     estadoshadow=None
     estadoshy=None
     estadobala=None
+    estadopower=None
+    powerup=False
+    
     canvas= Canvas(x, width=1280, height=720)
     canvas.focus_set()
     monstruos=4+difficulty #No. de monstruos en el nivel
@@ -2271,7 +2290,7 @@ def destruirprueba():
     canvas.create_window(50,600,window=nomb1)
     mario= canvas.create_rectangle(0,490,51,540,fill=None,width=0 )
 
-    
+    x.after(5000, SpawnPowerStar)
     vidas1=4
     
     canvas.pack()
@@ -2339,6 +2358,9 @@ def destruirprueba():
     shyhit1=PhotoImage(file='shyguyhit.gif')
     shyhit2=PhotoImage(file='shyguyhit2.gif')
     shythrow=PhotoImage(file='shyguythrow.gif')
+
+    ###Power Star###
+    powersprite=PhotoImage(file='powerstar.gif')
     
     ###Definición de constantes necesarias para el funcionamiento del juego###
     coordsplat2x1=int(canvas.coords(plat2)[0])
