@@ -591,6 +591,8 @@ def keym(event):
     global estadokoopa1
     global estadoparatroopa
     global estadoshadow
+    global power
+    global estadopower
 
     coordsmariox1=int(canvas.coords(mario)[0])
     coordsmarioy1= int(canvas.coords(mario)[1])
@@ -662,7 +664,11 @@ def keym(event):
                 spritemario=canvas.create_image(coordsmariox1+25,coordsmarioy2-27,image=imagenmariosaltoizquierda)
                 
                 fallmplat6()
-        
+        if estadopower=='creado':
+            coordspower=canvas.coords(power)
+            if coordsmarioy1>=coordsplatcentroy2 and coordsmarioy1<=coordsplat1y1 and(coordsmariox1<=coordspower[2] and coordsmariox1>=coordspower[0]) :
+                pickpowerm()
+                
         if coordsmariox1<0:
             canvas.move(mario, 1250, 0)
             canvas.move(spritemario, 1250, 0)
@@ -797,7 +803,6 @@ def mariohitleft():
         canvas.delete(spritemario)
         spritemario=canvas.create_image(coordsmariox1+25, coordsmarioy2-27, image=imagenmariohitizquierda)
         score1p.set(score1p.get()+100)
-        print(score1p.get())
         if score1p.get() == 900:
             vidas+=1
             score1p.set(0)
@@ -1037,6 +1042,7 @@ def paratroopabehaviour():
     global referenceparat
     global referenceparat2
     global parabolestate
+    global vidas
 
 
 
@@ -1062,6 +1068,7 @@ def paratroopamovement():
     global parabolestate
     global difficulty
     global score1p
+    global powerupm
 
 
     if estadoparatroopa=='creado':
@@ -1095,9 +1102,26 @@ def paratroopamovement():
             coordsmarioy2=int(canvas.coords(mario)[3])
             overlapsp=canvas.find_overlapping(coordsparatroopax1,coordsparatroopay1,coordsparatroopax2,coordsparatroopay2)
             if coordsparatroopay2>537 and coordsparatroopay2<=540 and coordsmarioy2>537 and coordsmarioy2<=540 and len(overlapsp)>=4 and coordsparatroopax1>pipe1coordsx2+20 and coordsparatroopax2<pipe2coordsx1 and ((coordsmariox1<= coordsparatroopax2+5) or (coordsmariox2>=coordsparatroopax1-5)):
-                mariodie()
+                if not(powerupm):
+                    mariodie()
+                else:
+                    flipparatroopa()
+                    paratroopadie()
+                    score1p.set(score1p.get()+100)
+                    if score1p.get() == 900:
+                        vidas+=1
+                        score1p.set(0)
+                    
             elif coordsparatroopay2<537 and coordsmarioy2<=coordsparatroopay2 and coordsmarioy2> coordsparatroopay1 and len(overlapsp)>5 and ((coordsmariox1<= coordsparatroopax2+5 and coordsmariox1 >=coordsparatroopax1) or (coordsmariox2>=coordsparatroopax1-5 and coordsmariox2<=coordsparatroopax2)):
-                mariodie()
+                if not(powerupm):
+                    mariodie()
+                else:
+                    flipparatroopa()
+                    paratroopadie()
+                    score1p.set(score1p.get()+100)
+                    if score1p.get() == 900:
+                        vidas+=1
+                        score1p.set(0)
 
         if coordsparatroopax1<pipe1coordsx2 and coordsparatroopay2>537:
             canvas.delete(paratroopa)
@@ -1323,6 +1347,9 @@ def shadow_behaviour():
     global shadowanim
     global estadomario
     global difficulty
+    global powerupm
+    global score1p
+    global vidas
 
     if difficulty==1:
         d=200
@@ -1351,9 +1378,25 @@ def shadow_behaviour():
             coordsmarioy2=int(canvas.coords(mario)[3])
             overlaps=canvas.find_overlapping(coordsshadowx1,coordsshadowy1,coordsshadowx2,coordsshadowy2)
             if coordsshadowy2>537 and coordsshadowy2<=540 and coordsmarioy2>537 and coordsmarioy2<=540 and len(overlaps)>=4 and coordsshadowx1<pipe2coordsx2-20 and ((coordsmariox1<= coordsshadowx2+5 and coordsmariox1 >=coordsshadowx1) or (coordsmariox2>=coordsshadowx1-5 and coordsmariox2<=coordsshadowx2)):
-                mariodie()
+                if not(powerupm):
+                    mariodie()
+                else:
+                    flipshadow()
+                    shadowdie()
+                    score1p.set(score1p.get()+100)
+                    if score1p.get() == 900:
+                        vidas+=1
+                        score1p.set(0)
             elif coordsshadowy2<537 and coordsmarioy2<=coordsshadowy2 and coordsmarioy2> coordsshadowy1 and len(overlaps)>5 and ((coordsmariox1<= coordsshadowx2+5 and coordsmariox1 >=coordsshadowx1) or (coordsmariox2>=coordsshadowx1-5 and coordsmariox2<=coordsshadowx2)):
-                mariodie()
+                if not(powerupm):
+                    mariodie()
+                else:
+                    flipshadow()
+                    shadowdie()
+                    score1p.set(score1p.get()+100)
+                    if score1p.get() == 900:
+                        vidas+=1
+                        score1p.set(0)
         if coordsshadowx1<pipe1coordsx2 and coordsshadowy2>537:
             canvas.delete(shadow)
             canvas.delete(spriteshadow)
@@ -1571,6 +1614,7 @@ def shybehaviour():
     global shystale
     global shystep
     global shyanim
+    global shyhitanim
     global estadomario
     global difficulty
 
@@ -1602,9 +1646,25 @@ def shybehaviour():
             coordsmarioy2=int(canvas.coords(mario)[3])
             overlaps=canvas.find_overlapping(coordsshyx1,coordsshyy1,coordsshyx2,coordsshyy2)
             if coordsshyy2>537 and coordsshyy2<=540 and coordsmarioy2>537 and coordsmarioy2<=540 and len(overlaps)>=4 and coordsshyx1>pipe1coordsx2+20 and ((coordsmariox1<= coordsshyx2+5 and coordsmariox1>=coordsshyx1) or (coordsmariox2>=coordsshyx1-5 and coordsmariox2<=coordsshyx2)):
-                freezemario()
+                if not(powerupm):
+                    freezemario()
+                else:
+                    shyhitanim=4
+                    shydie()
+                    score1p.set(score1p.get()+100)
+                    if score1p.get() == 900:
+                        vidas+=1
+                        score1p.set(0)
             elif coordsshyy2<537 and coordsmarioy2<=coordsshyy2 and coordsmarioy2> coordsshyy1 and len(overlaps)>5 and ((coordsmariox1<= coordsshyx2+5 and coordsmariox1 >=coordsshyx1) or (coordsmariox2>=coordsshyx1-5 and coordsmariox2<=coordsshyx2)):
-                freezemario()
+                if not(powerupm):
+                    freezemario()
+                else:
+                    shyhitanim=4
+                    shydie()
+                    score1p.set(score1p.get()+100)
+                    if score1p.get() == 900:
+                        vidas+=1
+                        score1p.set(0)
         if coordsshyx1>pipe2coordsx1 and coordsshyy2>537:
             canvas.delete(shy)
             canvas.delete(spriteshy)
@@ -1699,6 +1759,7 @@ def projectile():
     global estadobala
     global bala
     global estadoshy
+    global powerupm
     if difficulty==1:
         d=20
     elif difficulty==2:
@@ -1733,7 +1794,8 @@ def projectile():
             if len(overlaps)>=3 and ((coordsmariox1<=coordsbalax2+5 and coordsmariox1>=coordsbalax1) or (coordsmariox1>=coordsbalax1-5 and coordsmariox1<=coordsbalax2)):
                 canvas.delete(bala)
                 estadobala=None
-                freezemario()
+                if not powerupm:
+                    freezemario()
         if coordsbalax2>1285:
             canvas.delete(bala)
             estadobala= None
@@ -1803,9 +1865,25 @@ def koopa1_behaviour():
             coordsmarioy2=int(canvas.coords(mario)[3])
             overlaps=canvas.find_overlapping(coordskoopa1x1,coordskoopa1y1,coordskoopa1x2,coordskoopa1y2)
             if coordskoopa1y2>537 and coordskoopa1y2<=540 and coordsmarioy2>537 and coordsmarioy2<=540 and len(overlaps)>=4 and coordskoopa1x1>pipe1coordsx2+20 and ((coordsmariox1<= coordskoopa1x2+5 and coordsmariox1>=coordskoopa1x1) or (coordsmariox1>=coordskoopa1x1-5 and coordsmariox1<=coordskoopa1x2 )):
-                mariodie()
+                if not(powerupm):
+                    mariodie()
+                else:
+                    Koopa1_flip()
+                    koopadie()
+                    score1p.set(score1p.get()+100)
+                    if score1p.get() == 900:
+                        vidas+=1
+                        score1p.set(0)
             elif coordskoopa1y2<537 and coordsmarioy2<=coordskoopa1y2 and coordsmarioy2> coordskoopa1y1 and len(overlaps)>5 and ((coordsmariox1<= coordskoopa1x2+5 and coordsmariox1 >=coordskoopa1x1) or (coordsmariox2>=coordskoopa1x1-5 and coordsmariox2<=coordskoopa1x2)):
-                mariodie()
+                if not(powerupm):
+                    mariodie()
+                else:
+                    Koopa1_flip()
+                    koopadie()
+                    score1p.set(score1p.get()+100)
+                    if score1p.get() == 900:
+                        vidas+=1
+                        score1p.set(0)
         if coordskoopa1x1>pipe2coordsx1 and coordskoopa1y2>537:
             canvas.delete(koopa1)
             canvas.delete(spritekoopa)
@@ -2011,9 +2089,30 @@ def SpawnPowerStar():
 
     if estadopower==None:
         estadopower='creado'
-        power=canvas.create_rectangle(coordsplat1x1+175, coordsplat1y1-85, coordsplat1x1+225, coordsplat1y1-45)
+        power=canvas.create_rectangle(coordsplat1x1+175, coordsplat1y1-85, coordsplat1x1+225, coordsplat1y1-45, width=0)
         spritepower=canvas.create_image(coordsplat1x1+200, coordsplat1y1-65,image=powersprite)
-        
+
+def pickpowerm():
+    global powerupm
+    global estadopower
+    global spritepower
+    global power
+    global mainm
+    canvas.delete(power)
+    canvas.delete(spritepower)
+    estadopower=None
+    powerupm=True
+    mainm=threading.Thread(target=powermusic)
+    mainm.start()
+    
+    canvas.after(30000, unpower)
+def unpower():
+    global powerupm
+    global mainm
+    powerupm=False
+    mainm=threading.Thread(target=mainmusic)
+    mainm.start()
+    canvas.after(60000, SpawnPowerStar)
 
 
 ################POW###############
@@ -2080,6 +2179,8 @@ def Initialmusic():
     winsound.PlaySound('Menu.wav', winsound.SND_ASYNC)
 def mainmusic():
     winsound.PlaySound('Maint.wav', winsound.SND_ASYNC|winsound.SND_LOOP)
+def powermusic():
+    winsound.PlaySound('powertheme.wav',winsound.SND_ASYNC)
 
 
 def menuinic(event):
@@ -2319,7 +2420,7 @@ def destruirprueba():
     global addscore
     global estadopower
     global powersprite
-    global powerup
+    global powerupm
 
     global musica1
     x= Crear_Ventana()
@@ -2332,7 +2433,7 @@ def destruirprueba():
     estadoshy=None
     estadobala=None
     estadopower=None
-    powerup=False
+    powerupm=False
     rempow=3
     canvas= Canvas(x, width=1280, height=720)
     canvas.focus_set()
