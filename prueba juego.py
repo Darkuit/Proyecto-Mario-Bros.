@@ -2126,30 +2126,33 @@ def powpress():
     global shadowlife
     global shadowhitanim
     global shyhitanim
+    global powsprite
     if rempow>0:
         
         rempow-=1
+        if rempow==0:
+            canvas.delete(powsprite)
         if estadokoopa1=='creado':
             coordskoopa1y2=int(canvas.coords(koopa1)[3])
-            if coordskoopa1y2==coordsplat1y1 or coordskoopa1y2==coordsplat3y1 or coordskoopa1y2==coordsplat5y1 or coordskoopa1y2<540:
+            if coordskoopa1y2==coordsplat1y1 or coordskoopa1y2==coordsplat3y1 or coordskoopa1y2==coordsplat5y1 or (coordskoopa1y2<540 and coordskoopa1y2>=537):
                 Koopa1_flip()
         elif estadokoopa1=='volteado':
             coordskoopa1y2=int(canvas.coords(koopa1)[3])            
-            if coordskoopa1y2==coordsplat1y1 or coordskoopa1y2==coordsplat3y1 or coordskoopa1y2==coordsplat5y1 or coordskoopa1y2<540:
+            if coordskoopa1y2==coordsplat1y1 or coordskoopa1y2==coordsplat3y1 or coordskoopa1y2==coordsplat5y1 or (coordskoopa1y2<540 and coordskoopa1>=537):
                 unflipkoopa()
         if estadoparatroopa=='creado':
             coordsparatroopay2=int(canvas.coords(paratroopa)[3])
-            if coordsparatroopay2==coordsplat1y1 or coordsparatroopay2==coordsplat3y1 or coordsparatroopay2==coordsplat5y1 or coordsparatroopay2<540:
+            if coordsparatroopay2==coordsplat1y1 or coordsparatroopay2==coordsplat3y1 or coordsparatroopay2==coordsplat5y1 or (coordsparatroopay2<540 and coordsparatroopay2>=537):
                 flipparatroopa()
         elif estadoparatroopa=='volteado':
             coordsparatroopay2=int(canvas.coords(paratroopa)[3])            
-            if coordsparatroopay2==coordsplat1y1 or coordsparatroopay2==coordsplat3y1 or coordsparatroopay2==coordsplat5y1 or coordsparatroopay2<540:
+            if coordsparatroopay2==coordsplat1y1 or coordsparatroopay2==coordsplat3y1 or coordsparatroopay2==coordsplat5y1 or (coordsparatroopay2<540 and coordsparatroopay2>=537):
                 unflipparatroopa()
 
                 
         if estadoshadow=='creado':
             coordsshadowy2=int(canvas.coords(shadow)[3])
-            if coordsshadowy2==coordsplat1y1 or coordsshadowy2==coordsplat3y1 or coordsshadowy2==coordsplat5y1 or coordsshadowy2<540:
+            if coordsshadowy2==coordsplat1y1 or coordsshadowy2==coordsplat3y1 or coordsshadowy2==coordsplat5y1 or (coordsshadowy2<540 and coordsshadowy2>=537):
                     if shadowlife==2:
                         shadowhitanim=4
                         shadowhitfun()
@@ -2157,12 +2160,12 @@ def powpress():
                         flipshadow()
         elif estadoshadow=='volteado':
             coordsshadowy2=int(canvas.coords(shadow)[3])            
-            if coordsshadowy2==coordsplat1y1 or coordsshadowy2==coordsplat3y1 or coordsshadowy2==coordsplat5y1 or coordsshadowy2<540:
+            if coordsshadowy2==coordsplat1y1 or coordsshadowy2==coordsplat3y1 or coordsshadowy2==coordsplat5y1 or (coordsshadowy2<540 and coordsshadowy2>=537):
                 unflipshadow()
                 
         if estadoshy=='creado':
             coordsshyy2=int(canvas.coords(shy)[3])
-            if coordsshyy2==coordsplat1y1 or coordsshyy2==coordsplat3y1 or coordsshyy2==coordsplat5y1 or coordsshyy2<540:
+            if coordsshyy2==coordsplat1y1 or coordsshyy2==coordsplat3y1 or coordsshyy2==coordsplat5y1 or (coordsshyy2<540 and coordsshy>=537):
                 shyhitanim=4
                 shydie()
             
@@ -2366,6 +2369,7 @@ def destruirprueba():
     global coordspowx2
     global coordspowy2
     global rempow
+    global spritepow
 
     global monstruos
 
@@ -2468,7 +2472,9 @@ def destruirprueba():
     plat6= canvas.create_rectangle(730, 125, 1280, 150, fill='brown')
 
     ####Bloque POW####
-    POW= canvas.create_rectangle(590,405,630,440, fill='brown')
+    POW= canvas.create_rectangle(590,405,630,440, fill='grey')
+    spritepow=PhotoImage(file='powsprite.gif')
+    
 
 
     ###Sprites de Mario##
@@ -2605,7 +2611,7 @@ def destruirprueba():
 
     
 
-    
+    powsprite=canvas.create_image(coordspowx1+20,coordspowy1+10, image=spritepow)
     spritemario=canvas.create_image(coordsmariox1glob+25,coordsmarioy2glob-27, image=imagenmarioderecha)
     
     
