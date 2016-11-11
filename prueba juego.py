@@ -3,6 +3,7 @@ import time
 import random
 import winsound
 import threading
+import sys
 def Crear_Ventana():
     ventan=Tk()
     ventan.title('Game')
@@ -1617,86 +1618,92 @@ def shybehaviour():
     global shyhitanim
     global estadomario
     global difficulty
+    global paused
 
-
-    if difficulty==1:
-        d=200
-    elif difficulty==2:
-        d=150
-    elif difficulty==3:
-        d=100
-    elif difficulty==4:
-        d=50
-    elif difficulty==5:
-        d=0
-    if estadoshy=='creado':
-        coordsshyx1=int(canvas.coords(shy)[0])
-        coordsshyy1=int(canvas.coords(shy)[1])
-        coordsshyx2=int(canvas.coords(shy)[2])
-        coordsshyy2=int(canvas.coords(shy)[3])
-
+    if paused:
+        x.after(100, shybehaviour)
+    else:
         
 
-        canvas.move(shy,5,0)
-        canvas.move(spriteshy, 5, 0)
-        if estadomario!='muriendo' and estadomario!='congelado':
-            coordsmariox1=int(canvas.coords(mario)[0])
-            coordsmarioy1= int(canvas.coords(mario)[1])
-            coordsmariox2=int(canvas.coords(mario)[2])
-            coordsmarioy2=int(canvas.coords(mario)[3])
-            overlaps=canvas.find_overlapping(coordsshyx1,coordsshyy1,coordsshyx2,coordsshyy2)
-            if coordsshyy2>537 and coordsshyy2<=540 and coordsmarioy2>537 and coordsmarioy2<=540 and len(overlaps)>=4 and coordsshyx1>pipe1coordsx2+20 and ((coordsmariox1<= coordsshyx2+5 and coordsmariox1>=coordsshyx1) or (coordsmariox2>=coordsshyx1-5 and coordsmariox2<=coordsshyx2)):
-                if not(powerupm):
-                    freezemario()
-                else:
-                    shyhitanim=4
-                    shydie()
-                    score1p.set(score1p.get()+100)
-                    if score1p.get() == 900:
-                        vidas+=1
-                        score1p.set(0)
-            elif coordsshyy2<537 and coordsmarioy2<=coordsshyy2 and coordsmarioy2> coordsshyy1 and len(overlaps)>5 and ((coordsmariox1<= coordsshyx2+5 and coordsmariox1 >=coordsshyx1) or (coordsmariox2>=coordsshyx1-5 and coordsmariox2<=coordsshyx2)):
-                if not(powerupm):
-                    freezemario()
-                else:
-                    shyhitanim=4
-                    shydie()
-                    score1p.set(score1p.get()+100)
-                    if score1p.get() == 900:
-                        vidas+=1
-                        score1p.set(0)
-        if coordsshyx1>pipe2coordsx1 and coordsshyy2>537:
-            canvas.delete(shy)
-            canvas.delete(spriteshy)
-            shy=canvas.create_rectangle(100, 75, 140, coordsplat6y1, fill=None,width=0)
-            estadoshy='creado'
-            shyanim=1
+
+        if difficulty==1:
+            d=200
+        elif difficulty==2:
+            d=150
+        elif difficulty==3:
+            d=100
+        elif difficulty==4:
+            d=50
+        elif difficulty==5:
+            d=0
+        if estadoshy=='creado':
             coordsshyx1=int(canvas.coords(shy)[0])
             coordsshyy1=int(canvas.coords(shy)[1])
             coordsshyx2=int(canvas.coords(shy)[2])
             coordsshyy2=int(canvas.coords(shy)[3])
-            spriteshy=canvas.create_image(coordsshyx1+24, coordsshyy1+25, image=shystale)
 
-            score1p.set(score1p.get()-100)      
-                                                                                                                               
-        if shyanim==1:
-            canvas.delete(spriteshy)
-            spriteshy=canvas.create_image(coordsshyx1+24, coordsshyy1+30, image=shystep)
-            shyanim-=1
-        elif shyanim==0:
-            canvas.delete(spriteshy)
-            spriteshy=canvas.create_image(coordsshyx1+24, coordsshyy1+30, image=shystale)
-            shyanim+=1
-        if coordsshyx2>=1280:
-            canvas.move(shy,-1280,0)
-            canvas.move(spriteshy, -1280, 0)
-        if coordsshyx1>coordsplat5x2 and coordsshyy2<=coordsplat5y1:
-            fallshyplat5()
-        elif coordsshyx1>coordsplatcentrox2 and coordsshyy2<=coordsplatcentroy1:
-            fallshyplatcentro()
-        elif coordsshyx1>coordsplat1x2 and coordsshyx2<coordsplat2x1  and coordsshyy2==coordsplat1y1:
-            fallshyplat1()
-    x.after(100+d,shybehaviour)
+            
+
+            canvas.move(shy,5,0)
+            canvas.move(spriteshy, 5, 0)
+            if estadomario!='muriendo' and estadomario!='congelado':
+                coordsmariox1=int(canvas.coords(mario)[0])
+                coordsmarioy1= int(canvas.coords(mario)[1])
+                coordsmariox2=int(canvas.coords(mario)[2])
+                coordsmarioy2=int(canvas.coords(mario)[3])
+                overlaps=canvas.find_overlapping(coordsshyx1,coordsshyy1,coordsshyx2,coordsshyy2)
+                if coordsshyy2>537 and coordsshyy2<=540 and coordsmarioy2>537 and coordsmarioy2<=540 and len(overlaps)>=4 and coordsshyx1>pipe1coordsx2+20 and ((coordsmariox1<= coordsshyx2+5 and coordsmariox1>=coordsshyx1) or (coordsmariox2>=coordsshyx1-5 and coordsmariox2<=coordsshyx2)):
+                    if not(powerupm):
+                        freezemario()
+                    else:
+                        shyhitanim=4
+                        shydie()
+                        score1p.set(score1p.get()+100)
+                        if score1p.get() == 900:
+                            vidas+=1
+                            score1p.set(0)
+                elif coordsshyy2<537 and coordsmarioy2<=coordsshyy2 and coordsmarioy2> coordsshyy1 and len(overlaps)>5 and ((coordsmariox1<= coordsshyx2+5 and coordsmariox1 >=coordsshyx1) or (coordsmariox2>=coordsshyx1-5 and coordsmariox2<=coordsshyx2)):
+                    if not(powerupm):
+                        freezemario()
+                    else:
+                        shyhitanim=4
+                        shydie()
+                        score1p.set(score1p.get()+100)
+                        if score1p.get() == 900:
+                            vidas+=1
+                            score1p.set(0)
+            if coordsshyx1>pipe2coordsx1 and coordsshyy2>537:
+                canvas.delete(shy)
+                canvas.delete(spriteshy)
+                shy=canvas.create_rectangle(100, 75, 140, coordsplat6y1, fill=None,width=0)
+                estadoshy='creado'
+                shyanim=1
+                coordsshyx1=int(canvas.coords(shy)[0])
+                coordsshyy1=int(canvas.coords(shy)[1])
+                coordsshyx2=int(canvas.coords(shy)[2])
+                coordsshyy2=int(canvas.coords(shy)[3])
+                spriteshy=canvas.create_image(coordsshyx1+24, coordsshyy1+25, image=shystale)
+
+                score1p.set(score1p.get()-100)      
+                                                                                                                                   
+            if shyanim==1:
+                canvas.delete(spriteshy)
+                spriteshy=canvas.create_image(coordsshyx1+24, coordsshyy1+30, image=shystep)
+                shyanim-=1
+            elif shyanim==0:
+                canvas.delete(spriteshy)
+                spriteshy=canvas.create_image(coordsshyx1+24, coordsshyy1+30, image=shystale)
+                shyanim+=1
+            if coordsshyx2>=1280:
+                canvas.move(shy,-1280,0)
+                canvas.move(spriteshy, -1280, 0)
+            if coordsshyx1>coordsplat5x2 and coordsshyy2<=coordsplat5y1:
+                fallshyplat5()
+            elif coordsshyx1>coordsplatcentrox2 and coordsshyy2<=coordsplatcentroy1:
+                fallshyplatcentro()
+            elif coordsshyx1>coordsplat1x2 and coordsshyx2<coordsplat2x1  and coordsshyy2==coordsplat1y1:
+                fallshyplat1()
+        x.after(100+d,shybehaviour)
 def fallshyplat5():
     global shy
     global spriteshy
@@ -1742,14 +1749,20 @@ def fireshy():
     global estadoshy
     global spriteshy
     global shythrow
-    if estadoshy=='creado':
-        coordsshyx1=int(canvas.coords(shy)[0])
-        coordsshyy1= int(canvas.coords(shy)[1])
-        estadoshy='disparando'
-        canvas.delete(spriteshy)
-        spriteshy=canvas.create_image(coordsshyx1+24, coordsshyy1+30, image=shythrow)
-        x.after(500, shycontinue)
-        x.after(5, projectile)
+    global paused
+
+    if paused:
+        x.after(100, fireshy)
+    else:
+        
+        if estadoshy=='creado':
+            coordsshyx1=int(canvas.coords(shy)[0])
+            coordsshyy1= int(canvas.coords(shy)[1])
+            estadoshy='disparando'
+            canvas.delete(spriteshy)
+            spriteshy=canvas.create_image(coordsshyx1+24, coordsshyy1+30, image=shythrow)
+            x.after(500, shycontinue)
+            x.after(5, projectile)
 def shycontinue():
     global estadoshy
     estadoshy='creado'
@@ -1760,47 +1773,53 @@ def projectile():
     global bala
     global estadoshy
     global powerupm
-    if difficulty==1:
-        d=20
-    elif difficulty==2:
-        d=15
-    elif difficulty==3:
-        d=10
-    elif difficulty==4:
-        d=5
-    elif difficulty==5:
-        d=0
-    if estadobala== None and (estadoshy=='disparando' or estadoshy=='creado'):
-        coordsshyx1=int(canvas.coords(shy)[0])
-        coordsshyy1= int(canvas.coords(shy)[1])
-        coordsshyx2=int(canvas.coords(shy)[2])
-        coordsshyy2=int(canvas.coords(shy)[3])
-        bala=canvas.create_oval(coordsshyx2+10, coordsshyy1+10, coordsshyx2+30,coordsshyy1+30, fill='white')
+    global paused
 
-        estadobala='creado'
-        x.after(10+d, projectile) 
-    elif estadobala=='creado':
-        canvas.move(bala, 1, 0)
-        coordsbalax1=int(canvas.coords(bala)[0])
-        coordsbalay1= int(canvas.coords(bala)[1])
-        coordsbalax2=int(canvas.coords(bala)[2])
-        coordsbalay2=int(canvas.coords(bala)[3])
-        overlaps=canvas.find_overlapping(coordsbalax1,coordsbalay1,coordsbalax2,coordsbalay2)
-        if estadomario!='muriendo' and estadomario!='congelado':
-            coordsmariox1=int(canvas.coords(mario)[0])
-            coordsmarioy1= int(canvas.coords(mario)[1])
-            coordsmariox2=int(canvas.coords(mario)[2])
-            coordsmarioy2=int(canvas.coords(mario)[3])
-            if len(overlaps)>=3 and ((coordsmariox1<=coordsbalax2+5 and coordsmariox1>=coordsbalax1) or (coordsmariox1>=coordsbalax1-5 and coordsmariox1<=coordsbalax2)):
+    if paused:
+        x.after(2, projectile)
+    else:
+        
+        if difficulty==1:
+            d=20
+        elif difficulty==2:
+            d=15
+        elif difficulty==3:
+            d=10
+        elif difficulty==4:
+            d=5
+        elif difficulty==5:
+            d=0
+        if estadobala== None and (estadoshy=='disparando' or estadoshy=='creado'):
+            coordsshyx1=int(canvas.coords(shy)[0])
+            coordsshyy1= int(canvas.coords(shy)[1])
+            coordsshyx2=int(canvas.coords(shy)[2])
+            coordsshyy2=int(canvas.coords(shy)[3])
+            bala=canvas.create_oval(coordsshyx2+10, coordsshyy1+10, coordsshyx2+30,coordsshyy1+30, fill='white')
+
+            estadobala='creado'
+            x.after(10+d, projectile) 
+        elif estadobala=='creado':
+            canvas.move(bala, 1, 0)
+            coordsbalax1=int(canvas.coords(bala)[0])
+            coordsbalay1= int(canvas.coords(bala)[1])
+            coordsbalax2=int(canvas.coords(bala)[2])
+            coordsbalay2=int(canvas.coords(bala)[3])
+            overlaps=canvas.find_overlapping(coordsbalax1,coordsbalay1,coordsbalax2,coordsbalay2)
+            if estadomario!='muriendo' and estadomario!='congelado':
+                coordsmariox1=int(canvas.coords(mario)[0])
+                coordsmarioy1= int(canvas.coords(mario)[1])
+                coordsmariox2=int(canvas.coords(mario)[2])
+                coordsmarioy2=int(canvas.coords(mario)[3])
+                if len(overlaps)>=3 and ((coordsmariox1<=coordsbalax2+5 and coordsmariox1>=coordsbalax1) or (coordsmariox1>=coordsbalax1-5 and coordsmariox1<=coordsbalax2)):
+                    canvas.delete(bala)
+                    estadobala=None
+                    if not powerupm:
+                        freezemario()
+            if coordsbalax2>1285:
                 canvas.delete(bala)
-                estadobala=None
-                if not powerupm:
-                    freezemario()
-        if coordsbalax2>1285:
-            canvas.delete(bala)
-            estadobala= None
-        else:
-            x.after(2+d, projectile)
+                estadobala= None
+            else:
+                x.after(2+d, projectile)
 
 def shydie():
     global estadoshy
@@ -1837,90 +1856,95 @@ def koopa1_behaviour():
     global koopaanim
     global estadomario
     global difficulty
+    global paused
 
-    if difficulty==1:
-        d=200
-    elif difficulty==2:
-        d=150
-    elif difficulty==3:
-        d=100
-    elif difficulty==4:
-        d=50
-    elif difficulty==5:
-        d=0
-    if estadokoopa1=='creado':
-        coordskoopa1x1=int(canvas.coords(koopa1)[0])
-        coordskoopa1y1=int(canvas.coords(koopa1)[1])
-        coordskoopa1x2=int(canvas.coords(koopa1)[2])
-        coordskoopa1y2=int(canvas.coords(koopa1)[3])
+    if paused:
+        x.after(100, koopa1_behaviour)
+    else:
 
-        
-
-        canvas.move(koopa1,5,0)
-        canvas.move(spritekoopa, 5, 0)
-        if estadomario!='muriendo':
-            coordsmariox1=int(canvas.coords(mario)[0])
-            coordsmarioy1= int(canvas.coords(mario)[1])
-            coordsmariox2=int(canvas.coords(mario)[2])
-            coordsmarioy2=int(canvas.coords(mario)[3])
-            overlaps=canvas.find_overlapping(coordskoopa1x1,coordskoopa1y1,coordskoopa1x2,coordskoopa1y2)
-            if coordskoopa1y2>537 and coordskoopa1y2<=540 and coordsmarioy2>537 and coordsmarioy2<=540 and len(overlaps)>=4 and coordskoopa1x1>pipe1coordsx2+20 and ((coordsmariox1<= coordskoopa1x2+5 and coordsmariox1>=coordskoopa1x1) or (coordsmariox1>=coordskoopa1x1-5 and coordsmariox1<=coordskoopa1x2 )):
-                if not(powerupm):
-                    mariodie()
-                else:
-                    Koopa1_flip()
-                    koopadie()
-                    score1p.set(score1p.get()+100)
-                    if score1p.get() == 900:
-                        vidas+=1
-                        score1p.set(0)
-            elif coordskoopa1y2<537 and coordsmarioy2<=coordskoopa1y2 and coordsmarioy2> coordskoopa1y1 and len(overlaps)>5 and ((coordsmariox1<= coordskoopa1x2+5 and coordsmariox1 >=coordskoopa1x1) or (coordsmariox2>=coordskoopa1x1-5 and coordsmariox2<=coordskoopa1x2)):
-                if not(powerupm):
-                    mariodie()
-                else:
-                    Koopa1_flip()
-                    koopadie()
-                    score1p.set(score1p.get()+100)
-                    if score1p.get() == 900:
-                        vidas+=1
-                        score1p.set(0)
-        if coordskoopa1x1>pipe2coordsx1 and coordskoopa1y2>537:
-            canvas.delete(koopa1)
-            canvas.delete(spritekoopa)
-            koopa1=canvas.create_rectangle(100, 75, 140, coordsplat6y1, fill=None,width=0)
-            estadokoopa='creado'
-            koopaanim=1
+        if difficulty==1:
+            d=200
+        elif difficulty==2:
+            d=150
+        elif difficulty==3:
+            d=100
+        elif difficulty==4:
+            d=50
+        elif difficulty==5:
+            d=0
+        if estadokoopa1=='creado':
             coordskoopa1x1=int(canvas.coords(koopa1)[0])
             coordskoopa1y1=int(canvas.coords(koopa1)[1])
-            coordskoopax2=int(canvas.coords(koopa1)[2])
-            coordskoopay2=int(canvas.coords(koopa1)[3])
-            spritekoopa=canvas.create_image(coordskoopa1x1+24, coordskoopa1y1+25, image=koopastale)
+            coordskoopa1x2=int(canvas.coords(koopa1)[2])
+            coordskoopa1y2=int(canvas.coords(koopa1)[3])
 
-            score1p.set(score1p.get()-100)    
-                                                                                                                               
-        if koopaanim==1:
-            canvas.delete(spritekoopa)
-            spritekoopa=canvas.create_image(coordskoopa1x1+24, coordskoopa1y1+25, image=koopastep)
-            koopaanim-=1
-        elif koopaanim==0:
-            canvas.delete(spritekoopa)
-            spritekoopa=canvas.create_image(coordskoopa1x1+24, coordskoopa1y1+25, image=koopastale)
-            koopaanim+=1
-        if coordskoopa1x2>=1280:
-            canvas.move(koopa1,-1280,0)
-            canvas.move(spritekoopa, -1280, 0)
-        elif coordskoopa1x1<0:
-            canvas.move(koopa1,1280,0)
-            canvas.move(spritekoopa, 1280, 0)
-        if coordskoopa1x1>coordsplat5x2 and coordskoopa1y2<=coordsplat5y1:
-            fallkoopaplat5()
-        elif coordskoopa1x1>coordsplatcentrox2 and coordskoopa1y2<=coordsplatcentroy1:
-            fallkoopaplatcentro()
-        elif coordskoopa1x1>coordsplat1x2 and coordskoopa1x2<coordsplat2x1  and coordskoopa1y2==coordsplat1y1:
-            fallkoopaplat1()
-    elif estadokoopa1=='volteado':
-        return None
-    x.after(100+d,koopa1_behaviour)
+            
+
+            canvas.move(koopa1,5,0)
+            canvas.move(spritekoopa, 5, 0)
+            if estadomario!='muriendo':
+                coordsmariox1=int(canvas.coords(mario)[0])
+                coordsmarioy1= int(canvas.coords(mario)[1])
+                coordsmariox2=int(canvas.coords(mario)[2])
+                coordsmarioy2=int(canvas.coords(mario)[3])
+                overlaps=canvas.find_overlapping(coordskoopa1x1,coordskoopa1y1,coordskoopa1x2,coordskoopa1y2)
+                if coordskoopa1y2>537 and coordskoopa1y2<=540 and coordsmarioy2>537 and coordsmarioy2<=540 and len(overlaps)>=4 and coordskoopa1x1>pipe1coordsx2+20 and ((coordsmariox1<= coordskoopa1x2+5 and coordsmariox1>=coordskoopa1x1) or (coordsmariox1>=coordskoopa1x1-5 and coordsmariox1<=coordskoopa1x2 )):
+                    if not(powerupm):
+                        mariodie()
+                    else:
+                        Koopa1_flip()
+                        koopadie()
+                        score1p.set(score1p.get()+100)
+                        if score1p.get() == 900:
+                            vidas+=1
+                            score1p.set(0)
+                elif coordskoopa1y2<537 and coordsmarioy2<=coordskoopa1y2 and coordsmarioy2> coordskoopa1y1 and len(overlaps)>5 and ((coordsmariox1<= coordskoopa1x2+5 and coordsmariox1 >=coordskoopa1x1) or (coordsmariox2>=coordskoopa1x1-5 and coordsmariox2<=coordskoopa1x2)):
+                    if not(powerupm):
+                        mariodie()
+                    else:
+                        Koopa1_flip()
+                        koopadie()
+                        score1p.set(score1p.get()+100)
+                        if score1p.get() == 900:
+                            vidas+=1
+                            score1p.set(0)
+            if coordskoopa1x1>pipe2coordsx1 and coordskoopa1y2>537:
+                canvas.delete(koopa1)
+                canvas.delete(spritekoopa)
+                koopa1=canvas.create_rectangle(100, 75, 140, coordsplat6y1, fill=None,width=0)
+                estadokoopa='creado'
+                koopaanim=1
+                coordskoopa1x1=int(canvas.coords(koopa1)[0])
+                coordskoopa1y1=int(canvas.coords(koopa1)[1])
+                coordskoopax2=int(canvas.coords(koopa1)[2])
+                coordskoopay2=int(canvas.coords(koopa1)[3])
+                spritekoopa=canvas.create_image(coordskoopa1x1+24, coordskoopa1y1+25, image=koopastale)
+
+                score1p.set(score1p.get()-100)    
+                                                                                                                                   
+            if koopaanim==1:
+                canvas.delete(spritekoopa)
+                spritekoopa=canvas.create_image(coordskoopa1x1+24, coordskoopa1y1+25, image=koopastep)
+                koopaanim-=1
+            elif koopaanim==0:
+                canvas.delete(spritekoopa)
+                spritekoopa=canvas.create_image(coordskoopa1x1+24, coordskoopa1y1+25, image=koopastale)
+                koopaanim+=1
+            if coordskoopa1x2>=1280:
+                canvas.move(koopa1,-1280,0)
+                canvas.move(spritekoopa, -1280, 0)
+            elif coordskoopa1x1<0:
+                canvas.move(koopa1,1280,0)
+                canvas.move(spritekoopa, 1280, 0)
+            if coordskoopa1x1>coordsplat5x2 and coordskoopa1y2<=coordsplat5y1:
+                fallkoopaplat5()
+            elif coordskoopa1x1>coordsplatcentrox2 and coordskoopa1y2<=coordsplatcentroy1:
+                fallkoopaplatcentro()
+            elif coordskoopa1x1>coordsplat1x2 and coordskoopa1x2<coordsplat2x1  and coordskoopa1y2==coordsplat1y1:
+                fallkoopaplat1()
+        elif estadokoopa1=='volteado':
+            return None
+        x.after(100+d,koopa1_behaviour)
 
 def Koopa1_flip():
     global koopa1
@@ -1958,49 +1982,60 @@ def changeflipkoopa():
     global koopaflippedanim
     global estadokoopa1
     global background
-    coordskoopa1x1=int(canvas.coords(koopa1)[0])
-    coordskoopa1y1= int(canvas.coords(koopa1)[1])
-    coordskoopa1x2=int(canvas.coords(koopa1)[2])
-    coordskoopa1y2=int(canvas.coords(koopa1)[3])
-    if estadokoopa1!='volteado':
-        return None
-    else:
-        if koopaflippedanim==1:
-            canvas.delete(spritekoopa)
-            spritekoopa= canvas.create_image(coordskoopa1x1+26, coordskoopa1y1+20, image=koopaflipped2)
-            canvas.tag_lower(spritekoopa)
-            canvas.tag_lower(background)
-            koopaflippedanim-=1
-        elif koopaflippedanim==0:
-            canvas.delete(spritekoopa)
-            spritekoopa= canvas.create_image(coordskoopa1x1+26, coordskoopa1y1+20, image=koopaflipped)
-            canvas.tag_lower(spritekoopa)
-            canvas.tag_lower(background)
-            koopaflippedanim+=1
+    global paused
+
+    
+    if paused:
         x.after(500, changeflipkoopa)
+    else:
+        coordskoopa1x1=int(canvas.coords(koopa1)[0])
+        coordskoopa1y1= int(canvas.coords(koopa1)[1])
+        coordskoopa1x2=int(canvas.coords(koopa1)[2])
+        coordskoopa1y2=int(canvas.coords(koopa1)[3])
+        if estadokoopa1!='volteado':
+            return None
+        else:
+            if koopaflippedanim==1:
+                canvas.delete(spritekoopa)
+                spritekoopa= canvas.create_image(coordskoopa1x1+26, coordskoopa1y1+20, image=koopaflipped2)
+                canvas.tag_lower(spritekoopa)
+                canvas.tag_lower(background)
+                koopaflippedanim-=1
+            elif koopaflippedanim==0:
+                canvas.delete(spritekoopa)
+                spritekoopa= canvas.create_image(coordskoopa1x1+26, coordskoopa1y1+20, image=koopaflipped)
+                canvas.tag_lower(spritekoopa)
+                canvas.tag_lower(background)
+                koopaflippedanim+=1
+            x.after(500, changeflipkoopa)
         
 def unflipkoopa():
     global estadokoopa1
     global spritekoopa
     global koopastale
     global koopa1
-    coordskoopa1x1=int(canvas.coords(koopa1)[0])
-    coordskoopa1y1= int(canvas.coords(koopa1)[1])
-    coordskoopa1x2=int(canvas.coords(koopa1)[2])
-    coordskoopa1y2=int(canvas.coords(koopa1)[3])
-    if estadokoopa1!='volteado':
-        return None
-    
-    canvas.delete(koopa1)
-    canvas.delete(spritekoopa)
-    koopa1=canvas.create_rectangle(coordskoopa1x1+5, coordskoopa1y1-10, coordskoopa1x2-5, coordskoopa1y2, width=0)
-    coordskoopa1x1=int(canvas.coords(koopa1)[0])
-    coordskoopa1y1= int(canvas.coords(koopa1)[1])
-    coordskoopa1x2=int(canvas.coords(koopa1)[2])
-    coordskoopa1y2=int(canvas.coords(koopa1)[3])
-    spritekoopa=canvas.create_image(coordskoopa1x1+24,coordskoopa1y1+25, image=koopastale)
-    estadokoopa1='creado'
-    x.after(2, koopa1_behaviour)
+    global paused
+    if paused:
+        x.after(5000, unflipkoopa)
+    else:
+        
+        coordskoopa1x1=int(canvas.coords(koopa1)[0])
+        coordskoopa1y1= int(canvas.coords(koopa1)[1])
+        coordskoopa1x2=int(canvas.coords(koopa1)[2])
+        coordskoopa1y2=int(canvas.coords(koopa1)[3])
+        if estadokoopa1!='volteado':
+            return None
+        
+        canvas.delete(koopa1)
+        canvas.delete(spritekoopa)
+        koopa1=canvas.create_rectangle(coordskoopa1x1+5, coordskoopa1y1-10, coordskoopa1x2-5, coordskoopa1y2, width=0)
+        coordskoopa1x1=int(canvas.coords(koopa1)[0])
+        coordskoopa1y1= int(canvas.coords(koopa1)[1])
+        coordskoopa1x2=int(canvas.coords(koopa1)[2])
+        coordskoopa1y2=int(canvas.coords(koopa1)[3])
+        spritekoopa=canvas.create_image(coordskoopa1x1+24,coordskoopa1y1+25, image=koopastale)
+        estadokoopa1='creado'
+        x.after(2, koopa1_behaviour)
     
     
 def fallkoopaplat5():
@@ -2086,11 +2121,16 @@ def SpawnPowerStar():
     global powersprite
     global power
     global spritepower
+    global paused
+    if paused:
+        x.after(500, SpawnPowerStar)
+    else:
+        
 
-    if estadopower==None:
-        estadopower='creado'
-        power=canvas.create_rectangle(coordsplat1x1+175, coordsplat1y1-85, coordsplat1x1+225, coordsplat1y1-45, width=0)
-        spritepower=canvas.create_image(coordsplat1x1+200, coordsplat1y1-65,image=powersprite)
+        if estadopower==None:
+            estadopower='creado'
+            power=canvas.create_rectangle(coordsplat1x1+175, coordsplat1y1-85, coordsplat1x1+225, coordsplat1y1-45, width=0)
+            spritepower=canvas.create_image(coordsplat1x1+200, coordsplat1y1-65,image=powersprite)
 
 def pickpowerm():
     global powerupm
@@ -2227,6 +2267,52 @@ def menuinic(event):
             menu.bind('<d>', dif)
         elif state==0:
             menu.delete(men)
+            men=menu.create_image(0,0, image=load1, anchor=NW)        
+            menu.bind('<s>', ignore)
+            menu.bind('<w>', ignore)
+            menu.bind('<Return>', loadscreen)
+            menu.bind('<a>', loadscreen)
+            menu.bind('<d>', loadscreen)
+            state=0
+
+
+
+
+
+            
+def loadscreen(event):
+    global state
+    global men
+    global load1
+    global load2
+    global txt
+    global state
+    
+    if event.char=='d':
+        
+        if state==0:
+            state=1
+            menu.delete(men)
+            men=menu.create_image(0,0,image=load2, anchor=NW)
+            
+        elif state==1:
+            state-=1
+            menu.delete(men)
+            men=menu.create_image(0,0,image=load1,anchor=NW)
+    elif event.char=='a':
+        
+        if state==0:
+            state+=1
+            menu.delete(men)
+            men=menu.create_image(0,0,image=load2, anchor=NW)
+            
+        elif state==1:
+            state-=1
+            menu.delete(men)
+            men=menu.create_image(0,0,image=load1,anchor=NW)
+    else:
+        if state==1:
+            menu.delete(men)
             men=menu.create_image(0,0,image=nametype, anchor=NW)
             menu.bind('<s>', ignore)
             menu.bind('<w>', ignore)
@@ -2237,6 +2323,216 @@ def menuinic(event):
             bot=Button(menu, text='Lets go!', command=destruirprueba)
             menu.create_window(700,360, window=bot)
             menu.create_window(600, 360, window=txt)
+        elif state==0:
+            load()
+
+
+
+
+
+
+
+def load():
+    global nombre1, score1p, scorep1, vidas1
+    ventanprueb.destroy()
+    global estadokoopa1
+    global canvas
+    global estado
+    global plat1
+    global plat2
+    global plat3
+    global plat4
+    global plat5
+    global plat6
+    global mario
+    global coordsplat2x1
+    global coordsplat2y1
+    global coordsplat2x2
+    global coordsplat2y2
+    global coordsmarioy2glob
+    global coordsmariox1glob
+    global coordsmariox2glob
+    global coordsmarioy1glob
+    global coordsplat1x1
+    global coordsplat1y1
+    global coordsplat1x2
+    global coordsplat1y2
+
+
+    global coordsplat3x1
+    global coordsplat3y1
+    global coordsplat3x2
+    global coordsplat3y2
+    global coordsplat4x1
+    global coordsplat4y1
+    global coordsplat4x2
+    global coordsplat4y2
+    global coordsplatcentrox1
+    global coordsplatcentroy1
+    global coordsplatcentrox2
+    global coordsplatcentroy2
+
+    global coordsplat5x1
+    global coordsplat5y1
+    global coordsplat5x2
+    global coordsplat5y2
+    global coordsplat6x1
+    global coordsplat6y1
+    global coordsplat6x2
+    global coordsplat6y2
+
+    global pipe1
+    global pipe1coordsx1
+    global pipe1coordsx2
+    global pipe1coordsy1
+    global pipe1coordsy2
+    global pipesprite1
+
+    global pipe2
+    global pipe2coordsx1
+    global pipe2coordsx2
+    global pipe2coordsy1
+    global pipe2coordsy2
+    global pipesprite2
+
+    global POW
+    global powsprite
+    global coordspowx1
+    global coordspowy1
+    global coordspowx2
+    global coordspowy2
+    global rempow
+    global spritepow
+
+    global monstruos
+
+    global koopastale
+    global koopastep
+    global koopaflipped
+    global koopaflipped2
+
+    global estadoparatroopa
+    global paratroopastale
+    global paratroopaflap
+    global paratroopaflipped
+    global paratroopaflipped2
+
+
+    global estadoshadow
+    global shadowstale
+    global shadowstep
+    global shadowflipped
+    global shadowflipped2
+    global shadowhit
+    global shadowhit2
+
+    global estadoshy
+    global shystale
+    global shystep
+    global shyhit1
+    global shyhit2
+    global shythrow
+
+    global estadobala
+
+    
+    global x
+    global imagenmarioderecha
+    global spritemario
+    global estadomario
+    global imagenmarioizquierda
+    global imagenmariosaltoizquierda
+    global imagenmariosaltoderecha
+    global imagenmarioholdizquierda
+    global imagenmarioholdderecha
+    global imagenmariohitizquierda
+    global imagenmariohitderecha
+    global mariodieleft
+    global mariodieright
+    global mariodeadleft
+    global mariodeadright
+    global frozenmario
+
+    global background
+    global addscore
+    global estadopower
+    global powersprite
+    global powerupm
+
+    archivo=open('save.txt','r')
+
+
+def save():
+    archivo=open('save.txt','w')
+    savedata=[]
+    global estadomario
+    global mario
+    global estadokoopa1
+    global koopa1
+    global shadow
+    global shy
+    global paratroopa
+    global estadoshy
+    global estadoshadow
+    global estadoparatroopa
+    global rempow
+    global shadowlife
+    savedata.append(estadomario)
+    if estadokoopa1=='atacado':
+        estadokoopa1=None
+    if estadoparatroopa='atacado':
+        estadoparatroopa=None
+    if estadoshadow=='atacado':
+        estadoshadow=None
+    if estadoshy=='atacado':
+        estadoshy=None
+    if estadomario!='muriendo':
+        
+        coordsmario=canvas.coords(mario)
+    else:
+        coordsmario=[0,490,51,540]
+    savedata.append(coordsmario)
+
+    
+    savedata.append(estadokoopa1)
+    if estadokoopa1!=None:
+        coordskoopa=canvas.coords(koopa1)
+    else:
+        coordskoopa=[0,0,0,0]
+    savedata.append(coordskoopa)
+
+    
+    savedata.append(estadoparatroopa)
+    if estadoparatroopa!=None:
+        coordsparatroopa=canvas.coords(paratroopa)
+    else:
+        coordsparatroopa=[0,0,0,0]
+    savedata.append(coordsparatroopa)
+
+    
+    savedata.append(estadoshadow)
+    if estadoshadow!=None:
+        coordsshadow=canvas.coords(shadow)
+    else:
+        coordsshadow=[0,0,0,0]
+    savedata.append(coordsshadow)
+    savedata.append(shadowlife)
+
+    
+    savedata.append(estadoshy)
+    if estadoshy!=None:
+        coordsshy=canvas.coords(shy)
+    else:
+        coordsshy=[0,0,0,0]
+    savedata.append(coordsshy)
+
+    savedata.append(rempow)
+
+    archivo.write(str(savedata))
+
+
+def pause(event)
+    
     
 
 
@@ -2392,6 +2688,7 @@ def destruirprueba():
     global shadowflipped2
     global shadowhit
     global shadowhit2
+    global shadowlife
 
     global estadoshy
     global shystale
@@ -2427,6 +2724,11 @@ def destruirprueba():
     global powerupm
 
     global musica1
+
+
+    global paused
+
+    
     x= Crear_Ventana()
     mainm=threading.Thread(target=mainmusic)
     mainm.start()
@@ -2438,6 +2740,8 @@ def destruirprueba():
     estadobala=None
     estadopower=None
     powerupm=False
+    paused=False
+    shadowlife=0
     rempow=3
     canvas= Canvas(x, width=1280, height=720)
     canvas.focus_set()
@@ -2632,6 +2936,8 @@ dif2=PhotoImage(file='dif2.gif')
 dif3=PhotoImage(file='dif3.gif')
 dif4=PhotoImage(file='dif4.gif')
 dif5=PhotoImage(file='dif5.gif')
+load1=PhotoImage(file='load1.gif')
+load2=PhotoImage(file='load2.gif')
 nametype=PhotoImage(file='nametype.gif')
 state=0
 menu.pack()
