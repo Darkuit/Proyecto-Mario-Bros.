@@ -12,6 +12,10 @@ def Crear_Ventana():
 
 
 def moveupm():
+##'''
+##primera parte del salto, movimiento hacia arriba. Detecta si se choca por debajo a los enemigos
+##
+##'''
     global coords1m
     global coords2m
     global estadokoopa1
@@ -257,6 +261,10 @@ def moveupm():
         canvas.move(mario, 0, -2)
         canvas.move(spritemario, 0, -2)
 def movedownm():
+
+##'''
+##segunda parte del salto, movimiento hacia abajo
+##'''
     global coords1m
     global coords3m
     global estadomario
@@ -407,9 +415,15 @@ def jumpm(event):
 def bindit():
     canvas.bind('<w>', jumpm)
 def ignore(event):
+##'''
+##función que no hace nada, usada para ignorar los bindings
+##'''
     return 'break'
 
 def fallmplat1():
+##'''
+##todas las que respeten este código de nombre se refieren a las funciones que hacen que Mario caiga de alguna de las plataformas
+##'''
     global estadomario
     global spritemario
     coordsmariox1=int(canvas.coords(mario)[0])
@@ -587,6 +601,9 @@ def fallmplat6():
 
     
 def keym(event):
+##'''
+##función principal del movimiento de Mario
+##'''
     global estadomario
     global spritemario
     global canvas
@@ -752,6 +769,9 @@ def mbounce():
     return None
 
 def mhitkoopa(orient, enem):
+##'''
+##Función que hace que Mario 'golpee' a un enemigo volteado. Recibe la orientación hacia la que Mario está mirando y el enemigo a golpear
+##'''
     global spritemario
     global estadomario
     global imagenmarioholdizquierda
@@ -794,6 +814,8 @@ def mhitkoopa(orient, enem):
         elif enem=='shadow':
             x.after(200,shadowdie)
 def mariohitleft():
+    ''' Cambia la imagen para el efecto de animación y cambia la puntuación
+    '''
     global imagenmariohitizquierda, estadomario, spritemario, score1p, vidas1, addscore
     
     coordsmariox1=int(canvas.coords(mario)[0])
@@ -829,6 +851,9 @@ def mariohitright():
             score1p.set(0)
         
 def mariodie():
+    '''
+Primera parte de la muerte de Mario
+    '''
     global estadomario
     global spritemario
     global mariodieright
@@ -870,6 +895,9 @@ def mariodead():
         spritemario=canvas.create_image(coordsmariox1+25, coordsmarioy2-20, image=mariodeadright)
     x.after(1000, despawnmario)
 def despawnmario():
+##'''
+##desaparece a Mario y descuenta una vida. Inicia Game Over si quedan cero vidas
+##'''
     global mario
     global spritemario
     global vidas1
@@ -898,6 +926,9 @@ def despawnmario():
     
     x.after(3000, respawnmario)
 def respawnmario():
+##'''
+##Si quedan vidas, respawnea a Mario
+##'''
     global mario
     global estadomario
     global spritemario
@@ -908,6 +939,9 @@ def respawnmario():
     bindings()
 
 def freezemario():
+##'''
+##Congelado y descongelado de Mario. Efecto del Shy Guy
+##'''
     global estadomario
     global spritemario
     global frozenmario
@@ -934,6 +968,9 @@ def unfreezemario():
 ###########################ENEMIGOS################################
 
 def spawn_monster():
+##'''
+##Función que spawnea monstruos si quedan monstruos disponibles
+##'''
     global estadokoopa1
     global monstruos
     global estadoparatroopa
@@ -1057,6 +1094,9 @@ def spawn_monster():
 ########Kooopa Paratroopa########
 
 def paratroopabehaviour():
+##'''
+##Comportamiento de la paratroopa. Lanza la función de la parabola de esta
+##'''
     global paratroopa
     global estadoparatroopa
     global spriteparatroopa
@@ -1086,6 +1126,9 @@ def paratroopabehaviour():
             x.after(5, paratroopamovement)
 
 def paratroopamovement():
+##'''
+##Movimiento de la Paratroopa. Se mueve en parábola
+##'''
     global paratroopa
     global estadoparatroopa
     global spriteparatroopa
@@ -1203,6 +1246,9 @@ def paratroopamovement():
                     x.after(100+d, paratroopamovement)
                 
 def flipparatroopa():
+##'''
+##Función que voltea a la paratroopa. A partir de aquí, las funciones que se titulen 'flip...' harán lo mismo con  el monstruo que indiquen
+##'''
     global paratroopa
     global estadoparatroopa
     global spriteparatroopa
@@ -1230,6 +1276,9 @@ def flipparatroopa():
     x.after(15000, unflipparatroopa)
 
 def changeflipparatroopa():
+##'''
+##Función que crea la 'animación' cuando esta volteada cambiando los sprites. A partir de aquí, todas las funciones que se llamen 'changeflip...' harán lo mismo con el monstruo que indiquen
+##'''
     global estadoparatroopa
     global spriteparatroopa
     global paratroopaflipped
@@ -1264,6 +1313,9 @@ def changeflipparatroopa():
                 paratroopaflippedanim+=1
             x.after(500, changeflipparatroopa)
 def unflipparatroopa():
+##'''
+##Desvoltea a la Paratroopa después de un rato. De nuevo, todas las funciones que sigan este código de nombre haran lo mismo para su monstruo respectivo.
+##'''
     global estadoparatroopa
     global spriteparatroopa
     global paratroopastale
@@ -1314,6 +1366,9 @@ def unflipparatroopa():
 
         
 def fallparatroopaplat6():
+##'''
+##Función que hace caer a la Paratroopa de las plataformas. Todas las que se llamen 'fall...' de aquí en adelante indicarán la caida de la plataforma indicada para el monstruo indicado
+##'''
     global paratroopa
     global spriteparatroopa
     canvas.tag_raise(paratroopa)
@@ -1358,7 +1413,9 @@ def fallparatroopaplat2():
         canvas.move(paratroopa,0,2)
         canvas.move(spriteparatroopa,0,2)
 def paratroopadie():
-    
+##'''
+##Función que mata a la Paratroopa. De nuevo, la convención para el título se respeta para los otros monstruos.
+##'''
     global estadoparatroopa
     global spriteparatroopa
     global koopa1
@@ -1388,6 +1445,9 @@ def paratroopadie():
 #########################SHADOW KOOPA##############################
 
 def shadow_behaviour():
+##'''
+##Función encargada del movimiento de la Shadow Koopa, también accionara la función para matar a Mario si este esta en el radio.
+##'''
     global shadow
     global estadoshadow
     global spriteshadow
@@ -1642,6 +1702,9 @@ def unflipshadow():
         shadowlife=2
     x.after(2, shadow_behaviour)
 def shadowhitfun():
+##'''
+##Función única para la Shadow Koopa. Crea una animación al golpearla por primera vez (puesto que esta resiste dos golpes)
+##'''
     global estadoshadow
     global spriteshadow
     global shadowhit
@@ -1809,6 +1872,9 @@ def fallshyplat1():
         x.after(2, fallshyplat1)
         canvas.move(shy,0,2)
 def fireshy():
+##'''
+##Función única del Shy Guy en la que este dispara un proyectil que congela a Mario
+##'''
     global estadoshy
     global spriteshy
     global shythrow
@@ -1832,6 +1898,9 @@ def shycontinue():
     x.after(7000, shybehaviour)
     x.after(7500, fireshy)
 def projectile():
+##'''
+##Función que mueve al proyectil del Shy Guy y lo desintegra al llegar al borde de la pantalla.
+##'''
     global estadobala
     global bala
     global estadoshy
@@ -2180,6 +2249,9 @@ def koopadie():
 
 ###########POWER STAR################
 def SpawnPowerStar():
+##'''
+##Crea una Power Star, responsable de ser el powerup de invencibilidad del juego
+##'''
     global estadopower
     global powersprite
     global power
@@ -2196,6 +2268,9 @@ def SpawnPowerStar():
             spritepower=canvas.create_image(coordsplat1x1+200, coordsplat1y1-65,image=powersprite)
 
 def pickpowerm():
+##'''
+##Hace que Mario recoja la estrella. Elimina a esta, cambia la música y le asigna el powerup a Mario
+##'''
     global powerupm
     global estadopower
     global spritepower
@@ -2221,6 +2296,9 @@ def unpower():
 ################POW###############
 
 def powpress():
+##'''
+##Función de presionar el POW. Funciona 3 veces y voltea a todos los enemigos que esten en contacto con el suelo
+##'''
     global rempow
     global estadoparatroopa
     global estadokoopa1
@@ -2276,11 +2354,16 @@ def powpress():
 
 
 def bindings():
+##'''
+##Función para abreviar los 'bindings' necesarios en el juego.
+##'''
     canvas.bind('<a>', keym)
     canvas.bind('<d>', keym)
     canvas.bind('<w>', jumpm)
     
-    
+##'''
+##Funciones de música: Las hice en funciones aparte para facilitar el uso de threads.
+##'''
 def Initialmusic():
     winsound.PlaySound('Menu.wav', winsound.SND_ASYNC)
 def mainmusic():
@@ -2292,7 +2375,9 @@ def gameovermusic():
 
 
 def menuinic(event):
-    
+##'''
+##Función correspondiente al menú principal del juego, que permite seleccionar entre el juego y cambiar la dificultad.
+##'''
     global state
     global men
     global menuopt
@@ -2346,6 +2431,9 @@ def menuinic(event):
 
             
 def loadscreen(event):
+##'''
+##Función correspondiente a la pantalla que pregunta si el jugador quiere cargar la partida.
+##'''
     global state
     global men
     global load1
@@ -2400,6 +2488,9 @@ def loadscreen(event):
 
 
 def save():
+##'''
+##Función que guarda el estado del juego en el archivo save.txt
+##'''
     archivo=open('save.txt','w')
     savedata=[]
     global estadomario
@@ -2481,6 +2572,9 @@ def save():
 
 
 def pause(event):
+##'''
+##Función que pausa el juego y despliega el menú de pausa. También corresponde al manejo de este menú.
+##'''
     global paused
     global pausemenu1
     global pausemenu2
@@ -2522,6 +2616,9 @@ def pause(event):
 
 
 def dif(event):
+##'''
+##Función que corresponde a la pantalla en donde el jugador selecciona la dificultad
+##'''
     global difficulty
     global men
     global dif1
@@ -2581,6 +2678,9 @@ def dif(event):
         
 
 def destruirprueba():
+##'''
+##Función principal del juego, se crea el canvas con las figuras iniciales y se definen todas las constantes y archivos necesarios para la correcta ejecución de este. 
+##'''
     global nombre1, score1p, scorep1, vidas1
     ventanprueb.destroy()
     global estadokoopa1
@@ -2924,6 +3024,9 @@ def destruirprueba():
 
 
 def load():
+##'''
+##Función casi igual a destruirprueba(), sólo que esta incorpora los datos guardados en el save para cargar efectivamente la partida.
+##'''
     global nombre1, score1p, scorep1, vidas1
     ventanprueb.destroy()
     global estadokoopa1
